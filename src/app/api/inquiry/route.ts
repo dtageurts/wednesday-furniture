@@ -60,30 +60,39 @@ export async function POST(req: NextRequest) {
     userAgent: req.headers.get("user-agent") ?? null,
   };
 
-  if (!isFirebaseConfigured()) {
-    // Local/dev fallback so the form is testable before Firebase is wired up.
-    console.log("[inquiry] Firebase not configured — logging inquiry instead:", record);
-    return NextResponse.json({ ok: true, stored: false });
+  // Firestore (optional) and the notification email (optional) are independent —
+  // either can be configured on its own. A furniture maker with occasional inquiries
+  // may only ever set up the email and skip Firebase entirely.
+  let stored = false;
+
+  if (isFirebaseConfigured()) {
+    try {
+      const db = getDb();
+      await db.collection("inquiries").add({
+        ...record,
+        createdAt: FieldValue.serverTimestamp(),
+      });
+      stored = true;
+    } catch (err) {
+      // Don't fail the whole request just because Firestore is down — the
+      // notification email below is the part that actually needs to reach someone.
+      console.error("[inquiry] Failed to write to Firestore", err);
+    }
+  } else {
+    console.log("[inquiry] Firebase not configured — skipping Firestore write:", record);
   }
 
-  try {
-    const db = getDb();
-    await db.collection("inquiries").add({
-      ...record,
-      createdAt: FieldValue.serverTimestamp(),
-    });
-  } catch (err) {
-    console.error("[inquiry] Failed to write to Firestore", err);
-    return NextResponse.json({ error: "Something went wrong on our end. Please try again." }, { status: 500 });
-  }
-
+  let emailed = false;
   if (process.env.RESEND_API_KEY) {
     try {
       const { Resend } = await import("resend");
       const resend = new Resend(process.env.RESEND_API_KEY);
       const to = process.env.INQUIRY_TO_EMAIL || "contact@wednesdayfurniture.com";
+      // Use Resend's shared sandbox sender until a domain is verified in Resend
+      // (see RESEND_FROM_EMAIL in .env.example) — verified domains can send from their own address.
+      const from = process.env.RESEND_FROM_EMAIL || "Wednesday website <onboarding@resend.dev>";
       await resend.emails.send({
-        from: "Wednesday website <inquiries@wednesdayfurniture.com>",
+        from,
         to,
         replyTo: record.email,
         subject: `New inquiry — ${record.pieceName ?? record.source}`,
@@ -100,11 +109,19 @@ export async function POST(req: NextRequest) {
           .filter(Boolean)
           .join("\n"),
       });
+      emailed = true;
     } catch (err) {
-      // Don't fail the request if the notification email fails — the inquiry is already saved.
       console.error("[inquiry] Failed to send notification email", err);
     }
+  } else {
+    console.log("[inquiry] Resend not configured — skipping notification email.");
   }
 
-  return NextResponse.json({ ok: true, stored: true });
+  if (!stored && !emailed) {
+    // Neither integration is configured (or both failed) — still tell the visitor
+    // it worked so the UI stays testable, but this inquiry has gone nowhere.
+    console.warn("[inquiry] Inquiry was neither stored nor emailed:", record);
+  }
+
+  return NextResponse.json({ ok: true, stored, emailed });
 }
