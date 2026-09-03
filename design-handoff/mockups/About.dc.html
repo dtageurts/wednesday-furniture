@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,300;6..72,400&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: #FAF7F1; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: #A9784B; }
+</style>
+</helmet>
+
+<div style="font-family: Archivo, sans-serif; color: #23201B; background: #FAF7F1;">
+
+  <div style="background: #3C5142; color: #EFF1E8; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 18px clamp(20px, 4vw, 40px); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; position: sticky; top: 0; z-index: 20;">
+    <a href="Home.dc.html" style="font-family: Newsreader, serif; font-size: clamp(20px, 4vw, 22px); letter-spacing: 0.01em; text-transform: none;">Wednesday</a>
+    <div style="display: flex; align-items: center; gap: clamp(14px, 2.6vw, 26px);">
+      <a href="Pieces.dc.html">Pieces</a>
+      <a href="Contact.dc.html" style="background: #EFF1E8; color: #3C5142; padding: 10px 16px; white-space: nowrap;">Get in touch</a>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: clamp(28px, 5vw, 64px); padding: clamp(44px, 7vw, 84px) clamp(20px, 4vw, 40px) clamp(36px, 6vw, 56px);">
+    <div style="display: flex; flex-direction: column; gap: 18px;">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #3C5142;">The workshop · Utrecht</span>
+      <h1 style="margin: 0; font-family: Newsreader, serif; font-weight: 300; font-size: clamp(32px, 5.4vw, 48px); line-height: 1.06; text-wrap: pretty;">It started with one shelf that nobody sold in the right length.</h1>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 18px; align-self: end;">
+      <p style="margin: 0; font-size: 15px; line-height: 1.8; color: #55493B; text-wrap: pretty;">I build furniture on my own, in a small workshop, mostly in the evenings and on Wednesdays — which is where the name comes from. It began as a habit: rooms in Dutch houses are never standard, and the thing that would actually fit is never the thing in the shop.</p>
+      <p style="margin: 0; font-size: 15px; line-height: 1.8; color: #55493B; text-wrap: pretty;">So I measure, draw, buy planks, and build. Solid spruce and pine, occasionally oak. Every piece is one of one, made for a specific wall, alcove or table.</p>
+    </div>
+  </div>
+
+  <div style="aspect-ratio: 21/9; background-image: url('photos/pool-table-dining-top-01.jpeg'); background-size: cover; background-position: center 42%;"></div>
+
+  <div style="background: #3C5142; color: #EFF1E8; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: clamp(28px, 4vw, 48px); padding: clamp(48px, 8vw, 84px) clamp(20px, 4vw, 40px);">
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(239,241,232,0.6);">01 — Measure</span>
+      <p style="margin: 0; font-family: Newsreader, serif; font-weight: 300; font-size: 21px; line-height: 1.5; text-wrap: pretty;">You send dimensions and a photo of the space. I come back with a drawing and a price — no charge for that.</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(239,241,232,0.6);">02 — Build</span>
+      <p style="margin: 0; font-family: Newsreader, serif; font-weight: 300; font-size: 21px; line-height: 1.5; text-wrap: pretty;">Planks are cut, jointed and assembled by hand. Two to five weeks depending on the piece and the queue.</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(239,241,232,0.6);">03 — Finish &amp; fit</span>
+      <p style="margin: 0; font-family: Newsreader, serif; font-weight: 300; font-size: 21px; line-height: 1.5; text-wrap: pretty;">Three coats of hardwax oil, hand-rubbed. I deliver and mount it myself within an hour of Utrecht.</p>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(16px, 2.5vw, 24px); padding: clamp(40px, 6vw, 64px) clamp(20px, 4vw, 40px) clamp(28px, 4vw, 40px);">
+    <sc-for list="{{ process }}" as="shot" hint-placeholder-count="3">
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="aspect-ratio: 1; background: #E6DED0; background-image: repeating-linear-gradient(102deg, rgba(255,255,255,0.5) 0 3px, rgba(35,32,27,0.05) 3px 9px); display: grid; place-items: center; padding: 16px; text-align: center;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #8A7B67;">{{ shot.slot }}</span>
+        </div>
+        <span style="font-size: 13px; color: #6B5F50;">{{ shot.caption }}</span>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="padding: 0 clamp(20px, 4vw, 40px) clamp(48px, 8vw, 80px);">
+    <div style="background: #E9EBE0; padding: clamp(32px, 5vw, 52px) clamp(24px, 4vw, 40px); display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(24px, 4vw, 40px); align-items: center;">
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <h2 style="margin: 0; font-family: Newsreader, serif; font-weight: 300; font-size: clamp(26px, 4vw, 32px); color: #24301F; text-wrap: pretty;">Something in mind for your own room?</h2>
+        <p style="margin: 0; font-size: 15px; line-height: 1.7; color: #4A5545; text-wrap: pretty;">Send the dimensions and a photo — I'll reply with a plan and a price.</p>
+      </div>
+      <a href="Contact.dc.html" style="justify-self: start; display: inline-flex; align-items: center; min-height: 52px; background: #3C5142; color: #EFF1E8; padding: 16px 28px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase;">Start an inquiry →</a>
+    </div>
+  </div>
+
+  <div style="background: #E9EBE0; border-top: 1px solid #3C5142; padding: clamp(26px, 4vw, 34px) clamp(20px, 4vw, 40px); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;">
+    <span style="font-family: Newsreader, serif; font-size: clamp(18px, 2.6vw, 22px); color: #24301F; text-wrap: pretty;">Also available for home maintenance, DIY jobs and hanging &amp; mounting work.</span>
+    <a href="Contact.dc.html#small-job" style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.08em; background: #3C5142; color: #EFF1E8; padding: 12px 20px; white-space: nowrap;">Ask about it →</a>
+  </div>
+  <div style="background: #3C5142; color: rgba(239,241,232,0.78); padding: clamp(28px, 5vw, 34px) clamp(20px, 4vw, 40px) clamp(34px, 6vw, 44px); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;">
+    <span>Wednesday · Utrecht, NL</span>
+    <div style="display: flex; gap: 20px;"><a href="Contact.dc.html">Instagram</a><a href="Contact.dc.html">contact@wednesdayfurniture.com</a></div>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      process: [
+        { slot: "photo slot — bench with hand tools", caption: "The bench, most evenings." },
+        { slot: "photo slot — cutting or planing, hands in frame", caption: "Planing a shelf edge by hand." },
+        { slot: "photo slot — stacked planks / offcuts", caption: "Spruce, waiting its turn." }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

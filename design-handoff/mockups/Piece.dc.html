@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,300;6..72,400&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: #FAF7F1; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: #A9784B; }
+  input, textarea, button { font: inherit; color: inherit; }
+  input::placeholder, textarea::placeholder { color: #A79C8C; }
+  input:focus, textarea:focus { outline: 2px solid #3C5142; outline-offset: -2px; }
+</style>
+</helmet>
+
+<div style="font-family: Archivo, sans-serif; color: #23201B; background: #FAF7F1;">
+
+  <div style="background: #3C5142; color: #EFF1E8; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 18px clamp(20px, 4vw, 40px); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; position: sticky; top: 0; z-index: 20;">
+    <a href="Home.dc.html" style="font-family: Newsreader, serif; font-size: clamp(20px, 4vw, 22px); letter-spacing: 0.01em; text-transform: none;">Wednesday</a>
+    <div style="display: flex; align-items: center; gap: clamp(14px, 2.6vw, 26px);">
+      <a href="Pieces.dc.html" style="border-bottom: 1px solid rgba(239,241,232,0.6); padding-bottom: 2px;">Pieces</a>
+      <a href="About.dc.html">About</a>
+      <a href="Contact.dc.html" style="background: #EFF1E8; color: #3C5142; padding: 10px 16px; white-space: nowrap;">Get in touch</a>
+    </div>
+  </div>
+
+  <div style="padding: clamp(20px, 3vw, 28px) clamp(20px, 4vw, 40px) 0; display: flex; gap: 10px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #8A7B67;">
+    <a href="Pieces.dc.html">Pieces</a><span>/</span><span style="color: #23201B;">{{ piece.name }}</span>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: clamp(24px, 4vw, 56px); padding: clamp(24px, 4vw, 40px) clamp(20px, 4vw, 40px) clamp(32px, 5vw, 48px); align-items: start;">
+    <div style="display: flex; flex-direction: column; gap: clamp(10px, 1.5vw, 14px);">
+      <div style="aspect-ratio: 4/3; background-color: #E6DED0; background-image: url('{{ piece.hero }}'); background-size: cover; background-position: {{ piece.heroPos }};"></div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(10px, 1.5vw, 14px);">
+        <sc-for list="{{ piece.gallery }}" as="g" hint-placeholder-count="3">
+          <div style="aspect-ratio: 1; background: #E6DED0; background-image: repeating-linear-gradient(102deg, rgba(255,255,255,0.5) 0 3px, rgba(35,32,27,0.05) 3px 9px); display: grid; place-items: center; padding: 10px; text-align: center;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: #8A7B67; line-height: 1.5;">{{ g.slot }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 22px;">
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #3C5142;">No. {{ piece.no }}</span>
+        <h1 style="margin: 0; font-family: Newsreader, serif; font-weight: 300; font-size: clamp(32px, 5vw, 46px); line-height: 1.06; text-wrap: pretty;">{{ piece.name }}</h1>
+      </div>
+      <p style="margin: 0; font-size: 15px; line-height: 1.8; color: #55493B; text-wrap: pretty;">{{ piece.description }}</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; border-top: 1px solid #E6DED0; padding-top: 22px;">
+        <sc-for list="{{ piece.specs }}" as="s" hint-placeholder-count="4">
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A7B67;">{{ s.label }}</span>
+            <span style="font-size: 14px; line-height: 1.6; color: #23201B; text-wrap: pretty;">{{ s.value }}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #E6DED0; padding-top: 22px;">
+        <sc-for list="{{ piece.options }}" as="opt" hint-placeholder-count="2">
+          <button type="button" onClick="{{ opt.onSelect }}" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; border: 1px solid #CFC6B4; background: {{ opt.bg }}; padding: 12px 16px; width: 100%; text-align: left; cursor: pointer;">
+            <span style="font-size: 14px; color: #23201B;">{{ opt.dims }} <span style="color: #8A7B67;">·</span> <strong>{{ opt.price }}</strong></span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #3C5142; white-space: nowrap;">Request →</span>
+          </button>
+        </sc-for>
+        <div style="font-size: 13px; color: #8A7B67; padding: 2px 2px 0;">+ Add a painted finish — {{ piece.finishPrice }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="inquiry" style="padding: 0 clamp(20px, 4vw, 40px) clamp(48px, 8vw, 80px);">
+    <div style="background: #E9EBE0; padding: clamp(28px, 5vw, 52px) clamp(20px, 4vw, 40px); position: relative;">
+      <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 14px; max-width: 60ch;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #3C5142;">Request sent</span>
+          <h2 style="margin: 0; font-family: Newsreader, serif; font-weight: 300; font-size: clamp(26px, 4vw, 34px); color: #24301F; text-wrap: pretty;">Thanks — I've got it.</h2>
+          <p style="margin: 0; font-size: 15px; line-height: 1.75; color: #4A5545; text-wrap: pretty;">{{ sentSummary }}</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; padding-top: 6px;">
+            <a href="Pieces.dc.html" style="display: inline-flex; align-items: center; min-height: 48px; background: #3C5142; color: #EFF1E8; padding: 14px 22px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase;">Back to pieces</a>
+            <button type="button" onClick="{{ reset }}" style="min-height: 48px; background: none; border: 1px solid #3C5142; color: #3C5142; padding: 14px 22px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;">Send another</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(24px, 4vw, 56px); align-items: start;">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <h2 style="margin: 0; font-family: Newsreader, serif; font-weight: 300; font-size: clamp(27px, 4.2vw, 34px); color: #24301F; text-wrap: pretty;">Want this made for your space? Get in touch with your dimensions</h2>
+            <p style="margin: 0; font-size: 15px; line-height: 1.75; color: #4A5545; text-wrap: pretty;">Rough measurements are fine — width, height, depth, or just a photo of the wall. I reply within a couple of days with a drawing and a price. No obligation.</p>
+            <div style="display: flex; flex-direction: column; gap: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #5E6E58; padding-top: 8px;">
+              <span>Regarding: {{ piece.name }}</span>
+              <span>contact@wednesdayfurniture.com</span>
+            </div>
+          </div>
+
+          <form onSubmit="{{ onSubmit }}" style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+              <label style="display: flex; flex-direction: column; gap: 6px;">
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6E58;">Name *</span>
+                <input type="text" value="{{ form.name }}" onChange="{{ setName }}" placeholder="Your name" style="min-height: 48px; background: #FAF7F1; border: 1px solid #CFD3C4; padding: 12px 14px; font-size: 15px;" />
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px;">
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6E58;">Email *</span>
+                <input type="email" value="{{ form.email }}" onChange="{{ setEmail }}" placeholder="you@email.com" style="min-height: 48px; background: #FAF7F1; border: 1px solid #CFD3C4; padding: 12px 14px; font-size: 15px;" />
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px;">
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6E58;">City *</span>
+                <input type="text" value="{{ form.city }}" onChange="{{ setCity }}" placeholder="Utrecht" style="min-height: 48px; background: #FAF7F1; border: 1px solid #CFD3C4; padding: 12px 14px; font-size: 15px;" />
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px;">
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6E58;">Dimensions</span>
+                <input type="text" value="{{ form.dimensions }}" onChange="{{ setDimensions }}" placeholder="e.g. 180 × 45 × 40 cm" style="min-height: 48px; background: #FAF7F1; border: 1px solid #CFD3C4; padding: 12px 14px; font-size: 15px;" />
+              </label>
+            </div>
+
+            <label style="display: flex; flex-direction: column; gap: 6px;">
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6E58;">Message *</span>
+              <textarea rows="4" value="{{ form.message }}" onChange="{{ setMessage }}" placeholder="Where it will go, what it needs to hold, anything you like or want changed." style="background: #FAF7F1; border: 1px solid #CFD3C4; padding: 12px 14px; font-size: 15px; line-height: 1.6; resize: vertical;"></textarea>
+            </label>
+
+            <label style="display: flex; flex-direction: column; gap: 6px;">
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6E58;">Photo of your space (optional)</span>
+              <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap; background: #FAF7F1; border: 1px dashed #CFD3C4; padding: 14px;">
+                <input type="file" accept="image/*" onChange="{{ setFile }}" style="font-size: 13px; max-width: 100%;" />
+                <span style="font-size: 13px; color: #6E7A68;">{{ fileLabel }}</span>
+              </div>
+            </label>
+
+            <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size: 13px; color: #8C3A2B;">{{ error }}</span>
+            </sc-if>
+
+            <button type="submit" disabled="{{ sending }}" style="min-height: 54px; background: #3C5142; color: #EFF1E8; border: none; padding: 16px 24px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;">{{ submitLabel }}</button>
+            <span style="font-size: 12px; line-height: 1.6; color: #6E7A68;">Your details are used only to answer this request.</span>
+          </form>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <div style="border-top: 1px solid #E6DED0; padding: clamp(36px, 6vw, 64px) clamp(20px, 4vw, 40px) clamp(40px, 6vw, 72px); display: flex; flex-direction: column; gap: 24px;">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px;">
+      <h3 style="margin: 0; font-family: Newsreader, serif; font-weight: 300; font-size: clamp(24px, 3.6vw, 30px);">Other pieces</h3>
+      <a href="Pieces.dc.html" style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #3C5142;">All pieces →</a>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: clamp(18px, 3vw, 28px);">
+      <sc-for list="{{ others }}" as="o" hint-placeholder-count="3">
+        <a href="{{ o.href }}" style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="aspect-ratio: 4/5; background-color: #E6DED0; background-image: url('{{ o.img }}'); background-size: cover; background-position: {{ o.pos }};"></div>
+          <div style="display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-family: Newsreader, serif; font-size: 21px;">{{ o.name }}</span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #3C5142;">from {{ o.price }}</span>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="background: #E9EBE0; border-top: 1px solid #3C5142; padding: clamp(26px, 4vw, 34px) clamp(20px, 4vw, 40px); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;">
+    <span style="font-family: Newsreader, serif; font-size: clamp(18px, 2.6vw, 22px); color: #24301F; text-wrap: pretty;">Also available for home maintenance, DIY jobs and hanging &amp; mounting work.</span>
+    <a href="Contact.dc.html#small-job" style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.08em; background: #3C5142; color: #EFF1E8; padding: 12px 20px; white-space: nowrap;">Ask about it →</a>
+  </div>
+  <div style="background: #3C5142; color: rgba(239,241,232,0.78); padding: clamp(28px, 5vw, 34px) clamp(20px, 4vw, 40px) clamp(34px, 6vw, 44px); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;">
+    <span>Wednesday · Utrecht, NL</span>
+    <div style="display: flex; gap: 20px;"><a href="Contact.dc.html">Instagram</a><a href="Contact.dc.html">contact@wednesdayfurniture.com</a></div>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const PIECES = [
+  {
+    slug: "slatted-tv-cabinet", no: "01", name: "Slatted TV Cabinet", price: "€890",
+    options: [{ dims: "120 × 45 × 40 cm", price: "€890" }, { dims: "200 × 45 × 40 cm", price: "€1.190" }], finishPrice: "+€120",
+    hero: "photos/slatted-tv-cabinet-01.jpeg", heroPos: "62% 68%", pos: "62% 68%",
+    description: "A low cabinet with hand-slatted doors, built to sit under a television and hide everything that plugs into it. The slats are ripped from one plank so the grain runs continuously across both doors, and the legs are tapered by hand so the whole thing reads lighter than it is. Cable ports are cut wherever your sockets happen to be.",
+    specs: [
+      { label: "Wood", value: "Solid spruce, occasionally oak on request" },
+      { label: "Finish", value: "Hardwax oil, three coats, hand-rubbed" },
+      { label: "Lead time", value: "3–5 weeks" }
+    ],
+    gallery: [
+      { slot: "detail — slatted door front" },
+      { slot: "detail — tapered leg joint" },
+      { slot: "in situ — full living room" }
+    ]
+  },
+  {
+    slug: "pendant-beam", no: "02", name: "Pendant Beam", price: "€240",
+    options: [{ dims: "1,2 m", price: "€240" }, { dims: "2,0 m", price: "€320" }], finishPrice: "+€60",
+    hero: "photos/pendant-beam-01.jpeg", heroPos: "45% 45%", pos: "45% 45%",
+    description: "A solid pine beam suspended over a dining table, wired with warm dimmable bulbs recessed into the underside so you see light and not fittings. Hung on two steel cables, length cut to your table. It replaces the usual single lamp with one long, even wash of light.",
+    specs: [
+      { label: "Wood", value: "Solid pine, planed and softened edges" },
+      { label: "Finish", value: "Clear hardwax oil or black stain" },
+      { label: "Electrics", value: "E27 dimmable, NL-certified fittings" }
+    ],
+    gallery: [
+      { slot: "detail — recessed bulb underside" },
+      { slot: "detail — cable mount at ceiling" },
+      { slot: "in situ — lit over dinner" }
+    ]
+  },
+  {
+    slug: "pool-table-dining-top", no: "03", name: "Pool Table Dining Top", price: "€420",
+    options: [{ dims: "7ft table", price: "€420" }, { dims: "8ft table", price: "€480" }], finishPrice: "+€90",
+    hero: "photos/pool-table-dining-top-01.jpeg", heroPos: "center 45%", pos: "center 45%",
+    description: "A two-part top that turns a pool table into a dining table and back again in about a minute. Each half is light enough to lift alone, felt-lined underneath so nothing touches the cloth, and edged so the two halves close into one flat surface with no visible seam. Stores upright against a wall.",
+    specs: [
+      { label: "Wood", value: "Spruce boards, battened underside" },
+      { label: "Finish", value: "Hardwax oil, wipeable" },
+      { label: "Lead time", value: "2–3 weeks" }
+    ],
+    gallery: [
+      { slot: "detail — centre seam closed" },
+      { slot: "detail — felt-lined underside" },
+      { slot: "in use — set for dinner" }
+    ]
+  },
+  {
+    slug: "floating-wall-shelves", no: "04", name: "Floating Wall Shelves", price: "€120",
+    options: [{ dims: "per shelf, up to 120 cm", price: "€120" }, { dims: "per shelf, up to 240 cm", price: "€180" }], finishPrice: "+€40",
+    hero: "photos/slatted-tv-cabinet-01.jpeg", heroPos: "22% 48%", pos: "22% 48%",
+    description: "Full-wall pine shelving on hidden steel fixings — no brackets, no visible screws. Cut to the exact length of your alcove or wall so the shelf meets both sides cleanly, which is the whole reason these exist. Priced per shelf; most rooms take three or four.",
+    specs: [
+      { label: "Wood", value: "Solid pine, 30 mm, softened front edge" },
+      { label: "Finish", value: "Hardwax oil or white-washed" },
+      { label: "Fixing", value: "Concealed steel rods, drilled and mounted by me" }
+    ],
+    gallery: [
+      { slot: "detail — shelf edge against wall" },
+      { slot: "detail — concealed fixing before mounting" },
+      { slot: "in situ — full shelf wall styled" }
+    ]
+  }
+];
+
+class Component extends DCLogic {
+  state = {
+    slug: PIECES[0].slug,
+    selectedOptIdx: -1,
+    form: { name: "", email: "", city: "", dimensions: "", message: "" },
+    fileName: "",
+    error: "",
+    sending: false,
+    sent: false,
+    sentName: ""
+  };
+
+  selectOption = (piece, idx) => {
+    const opt = piece.options[idx];
+    this.setState(s => ({
+      selectedOptIdx: idx,
+      form: Object.assign({}, s.form, { dimensions: opt.dims, message: "Hi, I am interested in " + piece.name + " (" + opt.dims + ")." }),
+      error: ""
+    }));
+  };
+
+  componentDidMount() {
+    this.sync();
+    window.addEventListener("hashchange", this.sync);
+  }
+  componentWillUnmount() {
+    window.removeEventListener("hashchange", this.sync);
+  }
+
+  sync = () => {
+    const h = (window.location.hash || "").replace("#", "");
+    if (!h || h === "inquiry") return;
+    const [slugPart, optPart] = h.split(":");
+    const piece = PIECES.find(p => p.slug === slugPart);
+    if (!piece) return;
+    this.setState({ slug: slugPart, sent: false, error: "" });
+    if (optPart !== undefined) {
+      const idx = parseInt(optPart, 10);
+      if (!isNaN(idx) && piece.options[idx]) this.selectOption(piece, idx);
+    }
+  };
+
+  field = (key) => (e) => {
+    const v = e.target.value;
+    this.setState(s => ({ form: Object.assign({}, s.form, { [key]: v }), error: "" }));
+  };
+
+  onSubmit = (e) => {
+    e.preventDefault();
+    const f = this.state.form;
+    if (!f.name.trim()) return this.setState({ error: "Please add your name." });
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email.trim())) return this.setState({ error: "That email address doesn't look right." });
+    if (!f.city.trim()) return this.setState({ error: "Please add your city." });
+    if (f.message.trim().length < 10) return this.setState({ error: "A sentence or two about the space helps a lot." });
+    this.setState({ sending: true, error: "" });
+    setTimeout(() => {
+      this.setState({ sending: false, sent: true, sentName: f.name.trim().split(" ")[0] });
+      window.scrollTo({ top: document.getElementById("inquiry").offsetTop - 80, behavior: "smooth" });
+    }, 900);
+  };
+
+  reset = () => this.setState({
+    sent: false, sending: false, error: "", fileName: "", selectedOptIdx: -1,
+    form: { name: "", email: "", city: "", dimensions: "", message: "" }
+  });
+
+  renderVals() {
+    const piece = PIECES.find(p => p.slug === this.state.slug) || PIECES[0];
+    const others = PIECES.filter(p => p.slug !== piece.slug).map(p => ({
+      name: p.name, price: p.options[0].price, img: p.hero, pos: p.pos, href: "Piece.dc.html#" + p.slug
+    }));
+    const options = piece.options.map((o, i) => ({
+      dims: o.dims, price: o.price,
+      bg: this.state.selectedOptIdx === i ? "#DCE0D0" : "#F3EEE3",
+      onSelect: () => this.selectOption(piece, i)
+    }));
+    return {
+      piece: Object.assign({}, piece, { options }),
+      others,
+      form: this.state.form,
+      setName: this.field("name"),
+      setEmail: this.field("email"),
+      setCity: this.field("city"),
+      setDimensions: this.field("dimensions"),
+      setMessage: this.field("message"),
+      setFile: (e) => this.setState({ fileName: e.target.files && e.target.files[0] ? e.target.files[0].name : "" }),
+      fileLabel: this.state.fileName || "JPG or PNG, up to 10 MB",
+      onSubmit: this.onSubmit,
+      reset: this.reset,
+      error: this.state.error,
+      hasError: !!this.state.error,
+      sending: this.state.sending,
+      submitLabel: this.state.sending ? "Sending…" : "Send request",
+      sent: this.state.sent,
+      notSent: !this.state.sent,
+      sentSummary: (this.state.sentName ? this.state.sentName + ", your" : "Your") + " request about the " + piece.name.toLowerCase() + " is in. I'll reply to " + (this.state.form.email || "your email") + " within a couple of days with a drawing and a price."
+    };
+  }
+}
+</script>
+</body>
+</html>

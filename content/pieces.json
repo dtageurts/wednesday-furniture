@@ -1,0 +1,90 @@
+[
+  {
+    "slug": "slatted-tv-cabinet",
+    "no": "01",
+    "name": "Slatted TV Cabinet",
+    "note": "Slatted spruce doors on tapered legs, sized to your wall.",
+    "startingFrom": 890,
+    "description": "A low cabinet with hand-slatted doors, built to sit under a television and hide everything that plugs into it. The slats are ripped from one plank so the grain runs continuously across both doors, and the legs are tapered by hand so the whole thing reads lighter than it is. Cable ports are cut wherever your sockets happen to be.",
+    "materials": ["Solid spruce, occasionally oak on request", "Hardwax oil, three coats, hand-rubbed"],
+    "specs": [
+      { "label": "Wood", "value": "Solid spruce, occasionally oak on request" },
+      { "label": "Finish", "value": "Hardwax oil, three coats, hand-rubbed" },
+      { "label": "Lead time", "value": "3–5 weeks" }
+    ],
+    "options": [
+      { "dims": "120 × 45 × 40 cm", "price": 890 },
+      { "dims": "200 × 45 × 40 cm", "price": 1190 }
+    ],
+    "finishPrice": 120,
+    "images": [
+      { "src": "/photos/slatted-tv-cabinet-01.jpeg", "position": "62% 68%", "alt": "Slatted spruce TV cabinet with tapered legs" }
+    ]
+  },
+  {
+    "slug": "pendant-beam",
+    "no": "02",
+    "name": "Pendant Beam",
+    "note": "1,8 m solid pine light over your table",
+    "startingFrom": 240,
+    "description": "A solid pine beam suspended over a dining table, wired with warm dimmable bulbs recessed into the underside so you see light and not fittings. Hung on two steel cables, length cut to your table. It replaces the usual single lamp with one long, even wash of light.",
+    "materials": ["Solid pine, planed and softened edges", "Clear hardwax oil or black stain"],
+    "specs": [
+      { "label": "Wood", "value": "Solid pine, planed and softened edges" },
+      { "label": "Finish", "value": "Clear hardwax oil or black stain" },
+      { "label": "Electrics", "value": "E27 dimmable, NL-certified fittings" }
+    ],
+    "options": [
+      { "dims": "1,2 m", "price": 240 },
+      { "dims": "2,0 m", "price": 320 }
+    ],
+    "finishPrice": 60,
+    "images": [
+      { "src": "/photos/pendant-beam-01.jpeg", "position": "45% 45%", "alt": "Solid pine pendant beam light over a dining table" }
+    ]
+  },
+  {
+    "slug": "pool-table-dining-top",
+    "no": "03",
+    "name": "Pool Table Dining Top",
+    "note": "Two-part top, lifts off in a minute",
+    "startingFrom": 420,
+    "description": "A two-part top that turns a pool table into a dining table and back again in about a minute. Each half is light enough to lift alone, felt-lined underneath so nothing touches the cloth, and edged so the two halves close into one flat surface with no visible seam. Stores upright against a wall.",
+    "materials": ["Spruce boards, battened underside", "Hardwax oil, wipeable"],
+    "specs": [
+      { "label": "Wood", "value": "Spruce boards, battened underside" },
+      { "label": "Finish", "value": "Hardwax oil, wipeable" },
+      { "label": "Lead time", "value": "2–3 weeks" }
+    ],
+    "options": [
+      { "dims": "7ft table", "price": 420 },
+      { "dims": "8ft table", "price": 480 }
+    ],
+    "finishPrice": 90,
+    "images": [
+      { "src": "/photos/pool-table-dining-top-01.jpeg", "position": "center 45%", "alt": "Two-part wooden dining top over a pool table" }
+    ]
+  },
+  {
+    "slug": "floating-wall-shelves",
+    "no": "04",
+    "name": "Floating Wall Shelves",
+    "note": "Full-wall pine, hidden fixings",
+    "startingFrom": 120,
+    "description": "Full-wall pine shelving on hidden steel fixings — no brackets, no visible screws. Cut to the exact length of your alcove or wall so the shelf meets both sides cleanly, which is the whole reason these exist. Priced per shelf; most rooms take three or four.",
+    "materials": ["Solid pine, 30 mm, softened front edge", "Hardwax oil or white-washed"],
+    "specs": [
+      { "label": "Wood", "value": "Solid pine, 30 mm, softened front edge" },
+      { "label": "Finish", "value": "Hardwax oil or white-washed" },
+      { "label": "Fixing", "value": "Concealed steel rods, drilled and mounted by me" }
+    ],
+    "options": [
+      { "dims": "per shelf, up to 120 cm", "price": 120 },
+      { "dims": "per shelf, up to 240 cm", "price": 180 }
+    ],
+    "finishPrice": 40,
+    "images": [
+      { "src": "/photos/floating-shelves-01.jpeg", "position": "22% 48%", "alt": "Floating pine wall shelves with hidden fixings" }
+    ]
+  }
+]
