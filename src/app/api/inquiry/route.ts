@@ -12,6 +12,8 @@ interface InquiryPayload {
   message: string;
   pieceSlug?: string;
   pieceName?: string;
+  wood?: string;
+  varnish?: boolean;
   source: "home" | "piece-detail" | "services" | "contact";
   // honeypot — real users never fill this in
   company?: string;
@@ -55,6 +57,8 @@ export async function POST(req: NextRequest) {
     message: body.message.trim(),
     pieceSlug: body.pieceSlug ?? null,
     pieceName: body.pieceName ?? null,
+    wood: body.wood ?? null,
+    varnish: body.varnish ?? false,
     imageUrl: null as string | null,
     source: body.source,
     userAgent: req.headers.get("user-agent") ?? null,
@@ -102,6 +106,8 @@ export async function POST(req: NextRequest) {
           `City: ${record.city}`,
           record.dimensions ? `Dimensions: ${record.dimensions}` : null,
           record.pieceName ? `Piece: ${record.pieceName}` : null,
+          record.wood ? `Wood: ${record.wood}` : null,
+          record.pieceName ? `Varnish: ${record.varnish ? "yes" : "no"}` : null,
           `Source: ${record.source}`,
           "",
           record.message,

@@ -2,89 +2,107 @@
   {
     "slug": "slatted-tv-cabinet",
     "no": "01",
-    "name": "Slatted TV Cabinet",
-    "note": "Slatted spruce doors on tapered legs, sized to your wall.",
-    "startingFrom": 890,
-    "description": "A low cabinet with hand-slatted doors, built to sit under a television and hide everything that plugs into it. The slats are ripped from one plank so the grain runs continuously across both doors, and the legs are tapered by hand so the whole thing reads lighter than it is. Cable ports are cut wherever your sockets happen to be.",
-    "materials": ["Solid spruce, occasionally oak on request", "Hardwax oil, three coats, hand-rubbed"],
+    "name": "TV Cabinet",
+    "note": "TV Cabinet on Tapered Legs with Slatted Door in Oak or Beech.",
+    "startingFrom": 445,
+    "size": "big",
+    "description": "A low cabinet with hand-slatted doors, built to sit under a television and hide everything that plugs into it. The slats are ripped from one plank so the grain runs continuously across both doors, and the legs are tapered by hand so the whole thing reads lighter than it is.",
+    "materials": ["Solid eiken or beuken, choose below", "Hardwax oil, three coats, hand-rubbed"],
     "specs": [
-      { "label": "Wood", "value": "Solid spruce, occasionally oak on request" },
+      { "label": "Wood", "value": "Solid eiken (oak) or beuken (beech) — your choice" },
       { "label": "Finish", "value": "Hardwax oil, three coats, hand-rubbed" },
       { "label": "Lead time", "value": "3–5 weeks" }
     ],
-    "options": [
-      { "dims": "120 × 45 × 40 cm", "price": 890 },
-      { "dims": "200 × 45 × 40 cm", "price": 1190 }
+    "woodOptions": [
+      { "key": "eiken", "label": "Eiken (oak)" },
+      { "key": "beuken", "label": "Beuken (beech)" }
     ],
-    "finishPrice": 120,
+    "options": [
+      { "dims": "120 × 45 × 40 cm", "price": { "eiken": 500, "beuken": 445 } },
+      { "dims": "200 × 45 × 40 cm", "price": { "eiken": 600, "beuken": 510 } }
+    ],
     "images": [
-      { "src": "/photos/slatted-tv-cabinet-01.jpeg", "position": "62% 68%", "alt": "Slatted spruce TV cabinet with tapered legs" }
+      { "src": "/photos/slatted-tv-cabinet-01.jpeg", "position": "62% 68%", "alt": "Slatted spruce TV cabinet with tapered legs", "caption": "in the room" },
+      { "src": "/photos/slatted-tv-cabinet-02.jpeg", "position": "center 40%", "alt": "TV cabinet in a living room in the evening", "caption": "in the room, evening" },
+      { "src": "/photos/slatted-tv-cabinet-03.jpeg", "position": "center 35%", "alt": "Close-up of the hand-cut slat joinery", "caption": "joinery detail" },
+      { "src": "/photos/slatted-tv-cabinet-04.jpeg", "position": "center 40%", "alt": "Close-up of the cabinet's edge and grain", "caption": "grain detail" }
     ]
   },
   {
     "slug": "pendant-beam",
     "no": "02",
-    "name": "Pendant Beam",
-    "note": "1,8 m solid pine light over your table",
-    "startingFrom": 240,
-    "description": "A solid pine beam suspended over a dining table, wired with warm dimmable bulbs recessed into the underside so you see light and not fittings. Hung on two steel cables, length cut to your table. It replaces the usual single lamp with one long, even wash of light.",
+    "name": "Pendant Light Beam",
+    "note": "A beautiful, solid pendant light for over your table, with adjustable brightness and colour.",
+    "startingFrom": 380,
+    "size": "small",
+    "description": "A beautiful, solid pine beam suspended over your dining table on two steel cables, fitted with warm LEDs recessed into the underside so you see light, not fittings. Both the brightness and the colour temperature are adjustable, so it can be candle-warm for dinner or bright and neutral for working. It replaces the usual single lamp with one long, even wash of light.",
     "materials": ["Solid pine, planed and softened edges", "Clear hardwax oil or black stain"],
     "specs": [
       { "label": "Wood", "value": "Solid pine, planed and softened edges" },
       { "label": "Finish", "value": "Clear hardwax oil or black stain" },
-      { "label": "Electrics", "value": "E27 dimmable, NL-certified fittings" }
+      { "label": "Electrics", "value": "Dimmable, colour-adjustable LED, NL-certified fittings" }
     ],
     "options": [
-      { "dims": "1,2 m", "price": 240 },
-      { "dims": "2,0 m", "price": 320 }
+      { "dims": "120 cm", "price": 380 },
+      { "dims": "200 cm", "price": 390 }
     ],
-    "finishPrice": 60,
     "images": [
-      { "src": "/photos/pendant-beam-01.jpeg", "position": "45% 45%", "alt": "Solid pine pendant beam light over a dining table" }
+      { "src": "/photos/pendant-beam-01.jpeg", "position": "45% 45%", "alt": "Solid pine pendant light beam over a dining table", "caption": "in the room" },
+      { "src": "/photos/pendant-beam-02.jpeg", "position": "center 30%", "alt": "Pendant beam mounted on the ceiling on two cables", "caption": "ceiling mount" },
+      { "src": "/photos/pendant-beam-03.jpeg", "position": "center 45%", "alt": "Close-up of the pendant beam's grain and cable", "caption": "grain detail" },
+      { "src": "/photos/pendant-beam-04.jpeg", "position": "center 40%", "alt": "Close-up of the pendant beam's end and LED strip", "caption": "end detail" }
     ]
   },
   {
-    "slug": "pool-table-dining-top",
+    "slug": "table",
     "no": "03",
-    "name": "Pool Table Dining Top",
-    "note": "Two-part top, lifts off in a minute",
-    "startingFrom": 420,
-    "description": "A two-part top that turns a pool table into a dining table and back again in about a minute. Each half is light enough to lift alone, felt-lined underneath so nothing touches the cloth, and edged so the two halves close into one flat surface with no visible seam. Stores upright against a wall.",
-    "materials": ["Spruce boards, battened underside", "Hardwax oil, wipeable"],
+    "name": "Table",
+    "note": "A beautiful, solid, sturdy dining table in oak or beech.",
+    "startingFrom": 670,
+    "size": "big",
+    "description": "A dining table built to take the daily wear of family meals and late nights around it — a solid top on a sturdy frame, in your choice of oak or beech, finished with hardwax oil. Built to last generations, not seasons.",
+    "materials": ["Solid eiken or beuken, choose below", "Hardwax oil, three coats, hand-rubbed"],
     "specs": [
-      { "label": "Wood", "value": "Spruce boards, battened underside" },
-      { "label": "Finish", "value": "Hardwax oil, wipeable" },
-      { "label": "Lead time", "value": "2–3 weeks" }
+      { "label": "Wood", "value": "Solid eiken (oak) or beuken (beech) — your choice" },
+      { "label": "Finish", "value": "Hardwax oil, three coats, hand-rubbed" },
+      { "label": "Lead time", "value": "4–6 weeks" }
+    ],
+    "woodOptions": [
+      { "key": "eiken", "label": "Eiken (oak)" },
+      { "key": "beuken", "label": "Beuken (beech)" }
     ],
     "options": [
-      { "dims": "7ft table", "price": 420 },
-      { "dims": "8ft table", "price": 480 }
+      { "dims": "180 × 100 cm", "price": { "eiken": 740, "beuken": 670 } },
+      { "dims": "200 × 100 cm", "price": { "eiken": 765, "beuken": 690 } }
     ],
-    "finishPrice": 90,
     "images": [
-      { "src": "/photos/pool-table-dining-top-01.jpeg", "position": "center 45%", "alt": "Two-part wooden dining top over a pool table" }
+      { "src": "/photos/table-01.jpeg", "position": "center 40%", "alt": "Solid pine dining table with four chairs", "caption": "in the room" },
+      { "src": "/photos/table-02.jpeg", "position": "center 35%", "alt": "Table set under a matching pendant beam", "caption": "with pendant beam" },
+      { "src": "/photos/table-03.jpeg", "position": "center 38%", "alt": "Dining table from a second angle", "caption": "in the room" },
+      { "src": "/photos/table-04.jpeg", "position": "center 45%", "alt": "Close-up of the tabletop's corner and grain", "caption": "tabletop detail" }
     ]
   },
   {
-    "slug": "floating-wall-shelves",
+    "slug": "floating-bed-frame",
     "no": "04",
-    "name": "Floating Wall Shelves",
-    "note": "Full-wall pine, hidden fixings",
-    "startingFrom": 120,
-    "description": "Full-wall pine shelving on hidden steel fixings — no brackets, no visible screws. Cut to the exact length of your alcove or wall so the shelf meets both sides cleanly, which is the whole reason these exist. Priced per shelf; most rooms take three or four.",
-    "materials": ["Solid pine, 30 mm, softened front edge", "Hardwax oil or white-washed"],
+    "name": "Floating Bed Frame",
+    "note": "A floating platform bed on a solid Douglas fir frame.",
+    "startingFrom": 595,
+    "size": "big",
+    "description": "A floating platform bed with a visible Douglas fir frame and hidden grenen support underneath, so the whole bed reads like it's hovering off the floor — no legs, no visible base. Built in the three most common Dutch bed widths, all at standard 200 cm length.",
+    "materials": ["Douglas fir frame, grenen support underneath", "Hardwax oil, clear"],
     "specs": [
-      { "label": "Wood", "value": "Solid pine, 30 mm, softened front edge" },
-      { "label": "Finish", "value": "Hardwax oil or white-washed" },
-      { "label": "Fixing", "value": "Concealed steel rods, drilled and mounted by me" }
+      { "label": "Wood", "value": "Douglas fir frame, grenen support underneath" },
+      { "label": "Finish", "value": "Hardwax oil, clear" },
+      { "label": "Lead time", "value": "4–6 weeks" }
     ],
     "options": [
-      { "dims": "per shelf, up to 120 cm", "price": 120 },
-      { "dims": "per shelf, up to 240 cm", "price": 180 }
+      { "dims": "140 × 200 cm", "price": 595 },
+      { "dims": "160 × 200 cm", "price": 620 },
+      { "dims": "180 × 200 cm", "price": 640 }
     ],
-    "finishPrice": 40,
     "images": [
-      { "src": "/photos/floating-shelves-01.jpeg", "position": "22% 48%", "alt": "Floating pine wall shelves with hidden fixings" }
+      { "src": "/photos/floating-bed-frame-01.jpeg", "position": "center 55%", "alt": "Solid oak floating platform bed frame with yellow bedding" }
     ]
   }
 ]

@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { pieces } from "@/lib/pieces";
+import { pieces, euro, getPiece, optionPrice, type Wood } from "@/lib/pieces";
+import { varnishPrice } from "@/lib/pricing";
+import { DIAGONAL_GREEN } from "@/lib/ui";
 
 const TOPICS = ["A piece of furniture", "Something new / my own idea", "A small job"] as const;
 type Topic = (typeof TOPICS)[number];
@@ -35,13 +37,16 @@ const fieldLabelStyle: React.CSSProperties = {
 export function ContactForm() {
   const searchParams = useSearchParams();
   const [topic, setTopic] = useState<Topic>(TOPICS[0]);
+  const [pieceSlug, setPieceSlug] = useState("");
+  const [dimensionIndex, setDimensionIndex] = useState<number | null>(null);
+  const [wood, setWood] = useState<Wood | null>(null);
+  const [varnish, setVarnish] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
     city: "",
     dimensions: "",
     message: "",
-    piece: "",
     job: "",
     company: "",
   });
@@ -50,18 +55,40 @@ export function ContactForm() {
   const [sent, setSent] = useState(false);
   const [sentName, setSentName] = useState("");
 
+  const selectedPiece = pieceSlug ? getPiece(pieceSlug) : undefined;
+
   useEffect(() => {
     const t = searchParams.get("topic");
     const pieceParam = searchParams.get("piece");
+    const dimensionParam = searchParams.get("dimension");
+    const woodParam = searchParams.get("wood") as Wood | null;
     if (t === "own-idea") setTopic(TOPICS[1]);
     else if (t === "small-job") setTopic(TOPICS[2]);
     else if (pieceParam) {
       const p = pieces.find((p) => p.slug === pieceParam);
       if (p) {
         setTopic(TOPICS[0]);
-        setForm((f) => ({ ...f, piece: p.name }));
+        setPieceSlug(p.slug);
+        const chosenWood =
+          p.woodOptions && woodParam && p.woodOptions.some((w) => w.key === woodParam)
+            ? woodParam
+            : p.woodOptions
+            ? p.woodOptions[0].key
+            : null;
+        setWood(chosenWood);
+        const idx = dimensionParam ? parseInt(dimensionParam, 10) : NaN;
+        if (!Number.isNaN(idx) && p.options[idx]) {
+          setDimensionIndex(idx);
+          setForm((f) => ({
+            ...f,
+            message: `Hi, I'd like to order the ${p.name} (${p.options[idx].dims}${
+              chosenWood ? `, ${chosenWood}` : ""
+            }).`,
+          }));
+        }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   const field =
@@ -71,6 +98,14 @@ export function ContactForm() {
       setError("");
     };
 
+  const dimensionText = selectedPiece && dimensionIndex !== null ? selectedPiece.options[dimensionIndex].dims : "";
+  const basePrice =
+    selectedPiece && dimensionIndex !== null
+      ? optionPrice(selectedPiece.options[dimensionIndex], wood ?? undefined)
+      : 0;
+  const varnishSurcharge = selectedPiece && varnish ? varnishPrice(selectedPiece.size) : 0;
+  const total = basePrice + varnishSurcharge;
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.name.trim()) return setError("Please add your name.");
@@ -78,6 +113,8 @@ export function ContactForm() {
       return setError("That email address doesn't look right.");
     if (!form.city.trim()) return setError("Please add your city.");
     if (form.message.trim().length < 10) return setError("A sentence or two helps a lot.");
+    if (topic === TOPICS[0] && !selectedPiece) return setError("Please choose a piece.");
+    if (topic === TOPICS[0] && dimensionIndex === null) return setError("Please choose a size.");
 
     setSending(true);
     setError("");
@@ -89,9 +126,12 @@ export function ContactForm() {
           name: form.name,
           email: form.email,
           city: form.city,
-          dimensions: form.dimensions,
+          dimensions: topic === TOPICS[0] ? dimensionText : form.dimensions,
           message: form.message,
-          pieceName: topic === TOPICS[0] ? form.piece : undefined,
+          pieceSlug: topic === TOPICS[0] ? selectedPiece?.slug : undefined,
+          pieceName: topic === TOPICS[0] ? selectedPiece?.name : undefined,
+          wood: topic === TOPICS[0] ? wood ?? undefined : undefined,
+          varnish: topic === TOPICS[0] ? varnish : undefined,
           source: "contact",
           company: form.company,
         }),
@@ -114,7 +154,11 @@ export function ContactForm() {
   function reset() {
     setSent(false);
     setError("");
-    setForm({ name: "", email: "", city: "", dimensions: "", message: "", piece: "", job: "", company: "" });
+    setPieceSlug("");
+    setDimensionIndex(null);
+    setWood(null);
+    setVarnish(false);
+    setForm({ name: "", email: "", city: "", dimensions: "", message: "", job: "", company: "" });
   }
 
   if (sent) {
@@ -163,7 +207,7 @@ export function ContactForm() {
 
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         <span style={fieldLabelStyle}>What is it about? *</span>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+        <div className="topic-buttons" style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
           {TOPICS.map((t) => (
             <button
               key={t}
@@ -175,7 +219,7 @@ export function ContactForm() {
                 fontSize: 13,
                 cursor: "pointer",
                 border: "1px solid var(--green)",
-                background: topic === t ? "var(--green)" : "transparent",
+                background: topic === t ? DIAGONAL_GREEN : "transparent",
                 color: topic === t ? "var(--green-fg)" : "var(--green)",
               }}
             >
@@ -186,17 +230,118 @@ export function ContactForm() {
       </div>
 
       {topic === TOPICS[0] && (
-        <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          <span style={fieldLabelStyle}>Which piece? *</span>
-          <select value={form.piece} onChange={field("piece")} style={inputStyle}>
-            <option value="">Choose a piece…</option>
-            {pieces.map((p) => (
-              <option key={p.slug} value={p.name}>
-                {p.name}
-              </option>
-            ))}
-          </select>
-        </label>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            <span style={fieldLabelStyle}>Which piece? *</span>
+            <select
+              value={pieceSlug}
+              onChange={(e) => {
+                const p = pieces.find((x) => x.slug === e.target.value);
+                setPieceSlug(e.target.value);
+                setDimensionIndex(null);
+                setWood(p?.woodOptions ? p.woodOptions[0].key : null);
+                setVarnish(false);
+                setError("");
+              }}
+              style={inputStyle}
+            >
+              <option value="">Choose a piece…</option>
+              {pieces.map((p) => (
+                <option key={p.slug} value={p.slug}>
+                  {p.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          {selectedPiece?.woodOptions && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <span style={fieldLabelStyle}>Wood *</span>
+              <div style={{ display: "flex", gap: 8 }}>
+                {selectedPiece.woodOptions.map((w) => (
+                  <button
+                    key={w.key}
+                    type="button"
+                    onClick={() => setWood(w.key)}
+                    style={{
+                      flex: 1,
+                      minHeight: 44,
+                      padding: "10px 14px",
+                      fontSize: 13,
+                      cursor: "pointer",
+                      border: "1px solid var(--green)",
+                      background: wood === w.key ? DIAGONAL_GREEN : "transparent",
+                      color: wood === w.key ? "var(--green-fg)" : "var(--green)",
+                    }}
+                  >
+                    {w.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {selectedPiece && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <span style={fieldLabelStyle}>Size *</span>
+              {selectedPiece.options.map((opt, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setDimensionIndex(i)}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 10,
+                    border: "1px solid #cfc6b4",
+                    background: dimensionIndex === i ? "#dce0d0" : "#f3eee3",
+                    padding: "11px 14px",
+                    font: "inherit",
+                    textAlign: "left",
+                    cursor: "pointer",
+                  }}
+                >
+                  <span style={{ fontSize: 14 }}>
+                    {opt.dims} <span style={{ color: "var(--muted)" }}>·</span>{" "}
+                    <strong>{euro(optionPrice(opt, wood ?? undefined))}</strong>
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {selectedPiece && dimensionIndex !== null && (
+            <button
+              type="button"
+              onClick={() => setVarnish((v) => !v)}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: 10,
+                border: "1px solid #cfc6b4",
+                background: varnish ? "#dce0d0" : "#f3eee3",
+                padding: "11px 14px",
+                font: "inherit",
+                textAlign: "left",
+                cursor: "pointer",
+              }}
+            >
+              <span style={{ fontSize: 14 }}>Add varnish (+{euro(varnishPrice(selectedPiece.size))})</span>
+              <span
+                className="label"
+                style={{ fontSize: 10, color: varnish ? "var(--green)" : "var(--muted)", whiteSpace: "nowrap" }}
+              >
+                {varnish ? "Added" : "Add"}
+              </span>
+            </button>
+          )}
+
+          {selectedPiece && dimensionIndex !== null && (
+            <div style={{ fontSize: 13, color: "var(--green)", fontWeight: 600 }}>Total: {euro(total)}</div>
+          )}
+        </div>
       )}
 
       {topic === TOPICS[2] && (
@@ -224,18 +369,20 @@ export function ContactForm() {
         </label>
         <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
           <span style={fieldLabelStyle}>City *</span>
-          <input type="text" value={form.city} onChange={field("city")} placeholder="Utrecht" style={inputStyle} />
+          <input type="text" value={form.city} onChange={field("city")} placeholder="Amsterdam" style={inputStyle} />
         </label>
-        <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          <span style={fieldLabelStyle}>Dimensions</span>
-          <input
-            type="text"
-            value={form.dimensions}
-            onChange={field("dimensions")}
-            placeholder="e.g. 180 × 45 × 40 cm"
-            style={inputStyle}
-          />
-        </label>
+        {topic !== TOPICS[0] && (
+          <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            <span style={fieldLabelStyle}>Dimensions</span>
+            <input
+              type="text"
+              value={form.dimensions}
+              onChange={field("dimensions")}
+              placeholder="e.g. 180 × 45 × 40 cm"
+              style={inputStyle}
+            />
+          </label>
+        )}
       </div>
 
       <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>

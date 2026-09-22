@@ -6,6 +6,7 @@ import "@fontsource/archivo/500.css";
 import "@fontsource/archivo/600.css";
 import "@fontsource/ibm-plex-mono/400.css";
 import "@fontsource/ibm-plex-mono/500.css";
+import "@fontsource/mrs-saint-delafield/400.css";
 import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://wednesdayfurniture.com";

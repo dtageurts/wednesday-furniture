@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DIAGONAL_NAV } from "@/lib/ui";
 
 export function Nav({
   variant = "solid",
@@ -11,18 +12,33 @@ export function Nav({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    gap: 20,
-    padding: "18px clamp(20px, 4vw, 40px)",
-    fontSize: 13,
-    letterSpacing: "0.08em",
+    gap: "clamp(10px, 2.2vw, 22px)",
+    padding: "clamp(13px, 3.2vw, 26px) clamp(14px, 4vw, 56px)",
+    fontSize: "clamp(12px, 3.2vw, 20px)",
+    letterSpacing: "0.06em",
     textTransform: "uppercase",
+    whiteSpace: "nowrap",
     position: variant === "transparent" ? "absolute" : "sticky",
     top: 0,
     left: 0,
     right: 0,
     zIndex: 20,
-    background: variant === "transparent" ? "transparent" : "var(--green)",
+    background: variant === "transparent" ? "transparent" : DIAGONAL_NAV,
     color: variant === "transparent" ? "#fff" : "var(--green-fg)",
+  };
+  const textShadow = variant === "transparent" ? { textShadow: "0 1px 4px rgba(0,0,0,0.45)" } : {};
+
+  const ctaStyle: React.CSSProperties = {
+    background: "rgba(255,255,255,0.35)",
+    color: "#fff",
+    padding: "clamp(7px, 1.8vw, 16px) clamp(11px, 2.6vw, 28px)",
+    whiteSpace: "nowrap",
+    flexShrink: 0,
+    fontSize: "clamp(10px, 2.6vw, 18px)",
+    backdropFilter: "blur(6px)",
+    WebkitBackdropFilter: "blur(6px)",
+    border: "1px solid rgba(255,255,255,0.8)",
+    ...(variant === "transparent" ? { textShadow: "0 1px 3px rgba(0,0,0,0.3)" } : {}),
   };
 
   return (
@@ -30,36 +46,35 @@ export function Nav({
       <Link
         href="/"
         style={{
-          fontFamily: "var(--font-serif), serif",
-          fontSize: "clamp(20px, 4vw, 22px)",
+          fontFamily: "var(--font-brand), cursive",
+          fontWeight: 400,
+          fontSize: "clamp(26px, 6.4vw, 54px)",
           letterSpacing: "0.01em",
           textTransform: "none",
+          flexShrink: 0,
+          color: "#fff",
+          ...textShadow,
         }}
       >
         Wednesday
       </Link>
-      <div style={{ display: "flex", alignItems: "center", gap: "clamp(14px, 2.6vw, 26px)" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "clamp(9px, 2.2vw, 38px)" }}>
         <Link
           href="/pieces"
-          style={
-            active === "pieces"
+          style={{
+            flexShrink: 0,
+            ...textShadow,
+            ...(active === "pieces"
               ? { borderBottom: "1px solid rgba(239,241,232,0.6)", paddingBottom: 2 }
-              : undefined
-          }
+              : {}),
+          }}
         >
           Pieces
         </Link>
-        <Link href="/about">About</Link>
-        <Link
-          href="/contact"
-          style={{
-            background: variant === "transparent" ? "rgba(255,255,255,0.14)" : "var(--green-fg)",
-            color: variant === "transparent" ? "#fff" : "var(--green)",
-            padding: "10px 16px",
-            whiteSpace: "nowrap",
-            border: variant === "transparent" ? "1px solid rgba(255,255,255,0.5)" : "none",
-          }}
-        >
+        <Link href="/about" style={{ flexShrink: 0, ...textShadow }}>
+          About
+        </Link>
+        <Link href="/contact" style={ctaStyle}>
           Get in touch
         </Link>
       </div>

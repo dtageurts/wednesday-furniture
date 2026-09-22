@@ -15,6 +15,7 @@ export default function ContactPage() {
       <Nav active="contact" />
 
       <div
+        className="contact-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
@@ -25,7 +26,7 @@ export default function ContactPage() {
       >
         <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
           <span className="label" style={{ color: "var(--green)" }}>
-            Utrecht · replies within a few days
+            Tell me about the job.
           </span>
           <h1
             style={{
@@ -36,23 +37,8 @@ export default function ContactPage() {
               lineHeight: 1.05,
             }}
           >
-            Tell me about the job.
+            I will reply within 2 working days.
           </h1>
-          <p style={{ margin: 0, fontSize: 15, lineHeight: 1.8, color: "var(--ink-soft)", maxWidth: "44ch" }}>
-            A piece you saw, something you sketched on paper, or a shelf that needs putting up —
-            all of it lands in the same inbox. Rough dimensions and a photo are enough to start.
-          </p>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8, borderTop: "1px solid var(--rule)", paddingTop: 20, fontSize: 14, color: "var(--ink-soft)" }}>
-            <span className="label" style={{ fontSize: 10, color: "var(--muted)" }}>
-              Or directly
-            </span>
-            <a href="mailto:contact@wednesdayfurniture.com" style={{ color: "var(--green)" }}>
-              contact@wednesdayfurniture.com
-            </a>
-            <a href="https://instagram.com/wednesdayfurniture" target="_blank" rel="noreferrer" style={{ color: "var(--green)" }}>
-              Instagram — @wednesdayfurniture
-            </a>
-          </div>
         </div>
 
         <div style={{ background: "var(--sage)", padding: "clamp(24px, 4vw, 40px)" }}>
