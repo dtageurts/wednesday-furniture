@@ -37,11 +37,24 @@ export default function HomePage() {
           }}
         >
           <strong style={{ fontWeight: 600, color: "#fff" }}>
-            One maker, one workshop.
-          </strong>{" "}
-          Furniture built to last — solid spruce and pine, cut and joined by hand, finished
-          with hardwax oil. Each piece comes in two fixed sizes, with an optional varnished
-          finish.
+            Everything here is made by hand
+          </strong>
+          , no factory to pump out the same thing. Solid wood, no wood pulp. I prefer wood
+          joints over screws. Wood varies by piece, but I mainly use oak, beech, spruce and
+          pine; I pick what suits the piece, but if there&rsquo;s more than one option,
+          it&rsquo;s up to you. That means no two pieces are ever quite the same.
+        </p>
+        <p
+          style={{
+            margin: 0,
+            maxWidth: "72ch",
+            fontSize: "clamp(15px, 2.6vw, 26px)",
+            lineHeight: 1.7,
+            color: "rgba(255,255,255,0.9)",
+          }}
+        >
+          Every piece comes in two or three fixed sizes. If you need something different, get
+          in touch and we&rsquo;ll talk about it.
         </p>
         <svg width="18" height="11" viewBox="0 0 18 11" fill="none" aria-hidden="true" style={{ opacity: 0.75 }}>
           <path d="M1 1L9 9L17 1" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />

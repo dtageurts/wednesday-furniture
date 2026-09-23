@@ -110,7 +110,7 @@ export function HeroCarousel({ pieces }: { pieces: CarouselPiece[] }) {
             fontSize: "clamp(13px, 1.3vw, 18px)",
           }}
         >
-          I have my own idea
+          I have a Piece in mind.
         </Link>
       </div>
 

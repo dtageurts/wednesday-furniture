@@ -28,19 +28,6 @@ export function Nav({
   };
   const textShadow = variant === "transparent" ? { textShadow: "0 1px 4px rgba(0,0,0,0.45)" } : {};
 
-  const ctaStyle: React.CSSProperties = {
-    background: "rgba(255,255,255,0.35)",
-    color: "#fff",
-    padding: "clamp(7px, 1.8vw, 16px) clamp(11px, 2.6vw, 28px)",
-    whiteSpace: "nowrap",
-    flexShrink: 0,
-    fontSize: "clamp(10px, 2.6vw, 18px)",
-    backdropFilter: "blur(6px)",
-    WebkitBackdropFilter: "blur(6px)",
-    border: "1px solid rgba(255,255,255,0.8)",
-    ...(variant === "transparent" ? { textShadow: "0 1px 3px rgba(0,0,0,0.3)" } : {}),
-  };
-
   return (
     <div style={base}>
       <Link
@@ -74,7 +61,7 @@ export function Nav({
         <Link href="/about" style={{ flexShrink: 0, ...textShadow }}>
           About
         </Link>
-        <Link href="/contact" style={ctaStyle}>
+        <Link href="/contact" style={{ flexShrink: 0, ...textShadow }}>
           Get in touch
         </Link>
       </div>

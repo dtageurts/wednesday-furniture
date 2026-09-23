@@ -54,14 +54,18 @@ export default function AboutPage() {
         }}
       >
         <p style={{ margin: 0, maxWidth: "72ch", fontSize: "clamp(15px, 2.6vw, 26px)", lineHeight: 1.7, color: "rgba(255,255,255,0.9)" }}>
-          I build furniture on my own, in a small workshop, mostly in the evenings and on
-          Wednesdays — which is where the name comes from. Solid spruce and pine, cut and joined
-          by hand, finished with hardwax oil.
+          It started with a toolbox my grandpa gave me when I was young. I used it to build
+          birdhouses for the birds in our backyard and tiny villas for my hamsters.
         </p>
         <p style={{ margin: 0, maxWidth: "72ch", fontSize: "clamp(15px, 2.6vw, 26px)", lineHeight: 1.7, color: "rgba(255,255,255,0.9)" }}>
-          <strong style={{ fontWeight: 600, color: "#fff" }}>One maker, one workshop.</strong>{" "}
-          Every piece is measured, drawn, cut and finished by hand — no factory, no
-          outsourcing, just one person and one bench.
+          Over the years I&rsquo;ve built office desks, closets, kitchens, beds and much more.
+          Three years ago I built a table for our boardgaming group. We meet on Wednesdays, and
+          the name stuck.
+        </p>
+        <p style={{ margin: 0, maxWidth: "72ch", fontSize: "clamp(15px, 2.6vw, 26px)", lineHeight: 1.7, color: "rgba(255,255,255,0.9)" }}>
+          <strong style={{ fontWeight: 600, color: "#fff" }}>Wednesday is one maker, one workshop.</strong>{" "}
+          Working with my hands is what I needed in a screen-filled world. It now not only
+          makes me happy, but also those who use my creations daily.
         </p>
       </div>
 
