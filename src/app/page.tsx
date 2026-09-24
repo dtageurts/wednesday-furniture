@@ -31,7 +31,7 @@ export default function HomePage() {
           style={{
             margin: 0,
             maxWidth: "72ch",
-            fontSize: "clamp(15px, 2.6vw, 26px)",
+            fontSize: "clamp(15px, 2.6vw, 20px)",
             lineHeight: 1.7,
             color: "rgba(255,255,255,0.9)",
           }}
@@ -48,7 +48,7 @@ export default function HomePage() {
           style={{
             margin: 0,
             maxWidth: "72ch",
-            fontSize: "clamp(15px, 2.6vw, 26px)",
+            fontSize: "clamp(15px, 2.6vw, 20px)",
             lineHeight: 1.7,
             color: "rgba(255,255,255,0.9)",
           }}
