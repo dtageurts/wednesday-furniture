@@ -1,0 +1,131 @@
+[
+  {
+    "slug": "slatted-tv-cabinet",
+    "no": "01",
+    "name": "TV Cabinet",
+    "note": "TV Cabinet on Tapered Legs with Slatted Door in Oak or Beech.",
+    "startingFrom": 445,
+    "size": "big",
+    "description": "A low cabinet with hand-slatted doors, built to sit under a television and hide everything that plugs into it. The slats are ripped from one plank so the grain runs continuously across both doors, and the legs are tapered by hand so the whole thing reads lighter than it is.",
+    "materials": ["Solid eiken or beuken, choose below", "Hardwax oil, three coats, hand-rubbed"],
+    "specs": [
+      { "label": "Wood", "value": "Solid eiken (oak) or beuken (beech) — your choice" },
+      { "label": "Finish", "value": "Hardwax oil, three coats, hand-rubbed" },
+      { "label": "Lead time", "value": "3–5 weeks" }
+    ],
+    "woodOptions": [
+      { "key": "eiken", "label": "Eiken (oak)" },
+      { "key": "beuken", "label": "Beuken (beech)" }
+    ],
+    "options": [
+      { "dims": "120 × 45 × 40 cm", "price": { "eiken": 500, "beuken": 445 } },
+      { "dims": "200 × 45 × 40 cm", "price": { "eiken": 600, "beuken": 510 } }
+    ],
+    "images": [
+      { "src": "/photos/slatted-tv-cabinet-01.jpeg", "position": "62% 68%", "alt": "Slatted spruce TV cabinet with tapered legs", "caption": "in the room" },
+      { "src": "/photos/slatted-tv-cabinet-02.jpeg", "position": "center 40%", "alt": "TV cabinet in a living room in the evening", "caption": "in the room, evening" },
+      { "src": "/photos/slatted-tv-cabinet-03.jpeg", "position": "center 35%", "alt": "Close-up of the hand-cut slat joinery", "caption": "joinery detail" },
+      { "src": "/photos/slatted-tv-cabinet-04.jpeg", "position": "center 40%", "alt": "Close-up of the cabinet's edge and grain", "caption": "grain detail" }
+    ]
+  },
+  {
+    "slug": "pendant-beam",
+    "no": "02",
+    "name": "Pendant Light Beam",
+    "note": "A beautiful, solid pendant light for over your table, with adjustable brightness and colour.",
+    "startingFrom": 380,
+    "size": "small",
+    "description": "A beautiful, solid pine beam suspended over your dining table on two steel cables, fitted with warm LEDs recessed into the underside so you see light, not fittings. Both the brightness and the colour temperature are adjustable, so it can be candle-warm for dinner or bright and neutral for working. It replaces the usual single lamp with one long, even wash of light.",
+    "materials": ["Solid pine, planed and softened edges", "Clear hardwax oil or black stain"],
+    "specs": [
+      { "label": "Wood", "value": "Solid pine, planed and softened edges" },
+      { "label": "Finish", "value": "Clear hardwax oil or black stain" },
+      { "label": "Electrics", "value": "Dimmable, colour-adjustable LED, NL-certified fittings" }
+    ],
+    "options": [
+      { "dims": "120 cm", "price": 380 },
+      { "dims": "200 cm", "price": 390 }
+    ],
+    "images": [
+      { "src": "/photos/pendant-beam-01.jpeg", "position": "45% 45%", "alt": "Solid pine pendant light beam over a dining table", "caption": "in the room" },
+      { "src": "/photos/pendant-beam-02.jpeg", "position": "center 30%", "alt": "Pendant beam mounted on the ceiling on two cables", "caption": "ceiling mount" },
+      { "src": "/photos/pendant-beam-03.jpeg", "position": "center 45%", "alt": "Close-up of the pendant beam's grain and cable", "caption": "grain detail" },
+      { "src": "/photos/pendant-beam-04.jpeg", "position": "center 40%", "alt": "Close-up of the pendant beam's end and LED strip", "caption": "end detail" }
+    ]
+  },
+  {
+    "slug": "table",
+    "no": "03",
+    "name": "Table",
+    "note": "A beautiful, solid, sturdy dining table in oak or beech.",
+    "startingFrom": 670,
+    "size": "big",
+    "description": "A dining table built to take the daily wear of family meals and late nights around it — a solid top on a sturdy frame, in your choice of oak or beech, finished with hardwax oil. Built to last generations, not seasons.",
+    "materials": ["Solid eiken or beuken, choose below", "Hardwax oil, three coats, hand-rubbed"],
+    "specs": [
+      { "label": "Wood", "value": "Solid eiken (oak) or beuken (beech) — your choice" },
+      { "label": "Finish", "value": "Hardwax oil, three coats, hand-rubbed" },
+      { "label": "Lead time", "value": "4–6 weeks" }
+    ],
+    "woodOptions": [
+      { "key": "eiken", "label": "Eiken (oak)" },
+      { "key": "beuken", "label": "Beuken (beech)" }
+    ],
+    "options": [
+      { "dims": "180 × 100 cm", "price": { "eiken": 740, "beuken": 670 } },
+      { "dims": "200 × 100 cm", "price": { "eiken": 765, "beuken": 690 } }
+    ],
+    "images": [
+      { "src": "/photos/table-01.jpeg", "position": "center 40%", "alt": "Solid pine dining table with four chairs", "caption": "in the room" },
+      { "src": "/photos/table-02.jpeg", "position": "center 35%", "alt": "Table set under a matching pendant beam", "caption": "with pendant beam" },
+      { "src": "/photos/table-03.jpeg", "position": "center 38%", "alt": "Dining table from a second angle", "caption": "in the room" },
+      { "src": "/photos/table-04.jpeg", "position": "center 45%", "alt": "Close-up of the tabletop's corner and grain", "caption": "tabletop detail" }
+    ]
+  },
+  {
+    "slug": "floating-bed-frame",
+    "no": "04",
+    "name": "Floating Bed Frame",
+    "note": "A floating platform bed on a solid Douglas fir frame.",
+    "startingFrom": 595,
+    "size": "big",
+    "description": "A floating platform bed with a visible Douglas fir frame and hidden grenen support underneath, so the whole bed reads like it's hovering off the floor — no legs, no visible base. Built in the three most common Dutch bed widths, all at standard 200 cm length.",
+    "materials": ["Douglas fir frame, grenen support underneath", "Hardwax oil, clear"],
+    "specs": [
+      { "label": "Wood", "value": "Douglas fir frame, grenen support underneath" },
+      { "label": "Finish", "value": "Hardwax oil, clear" },
+      { "label": "Lead time", "value": "4–6 weeks" }
+    ],
+    "options": [
+      { "dims": "140 × 200 cm", "price": 595 },
+      { "dims": "160 × 200 cm", "price": 620 },
+      { "dims": "180 × 200 cm", "price": 640 }
+    ],
+    "images": [
+      { "src": "/photos/floating-bed-frame-01.jpeg", "position": "center 55%", "alt": "Solid oak floating platform bed frame with yellow bedding" }
+    ]
+  },
+  {
+    "slug": "glass-coffee-table",
+    "no": "05",
+    "name": "Glass Coffee Table",
+    "note": "Two angled beech frames holding a glass top, tensioned by a single steel wire.",
+    "startingFrom": 375,
+    "size": "small",
+    "description": "A low coffee table built from two angled beech frames that never quite touch — a single steel wire holds the glass top taut between them, so the whole thing reads as lighter than it looks. Finished dark to read like walnut. Low enough to sit beside a sofa without blocking the TV.",
+    "materials": ["Solid beuken (beech), laminated and dark-oiled", "6mm tempered glass top", "Steel tension wire"],
+    "specs": [
+      { "label": "Wood", "value": "Solid beuken (beech), dark walnut-tone oil finish" },
+      { "label": "Glass", "value": "6mm tempered glass, polished edges" },
+      { "label": "Lead time", "value": "1–2 weeks" }
+    ],
+    "options": [
+      { "dims": "80 × 40 × 38 cm", "price": 375 }
+    ],
+    "images": [
+      { "src": "/photos/glass-table-01.jpeg", "position": "center 55%", "alt": "Walnut-finish glass coffee table on a patterned rug", "caption": "in the room" },
+      { "src": "/photos/glass-table-02.jpeg", "position": "center 50%", "alt": "Close-up of the mitred corner joinery", "caption": "joinery detail" },
+      { "src": "/photos/glass-table-03.jpeg", "position": "center 50%", "alt": "Close-up of the steel tension wire meeting the glass", "caption": "tension wire detail" }
+    ]
+  }
+]

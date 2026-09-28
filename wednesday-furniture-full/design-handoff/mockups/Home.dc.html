@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,300;6..72,400&amp;family=Archivo:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: #FAF7F1; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: #A9784B; }
+</style>
+</helmet>
+
+<div style="font-family: Archivo, sans-serif; color: #23201B; background: #FAF7F1;">
+
+  <div style="background: #3C5142; color: #FFFFFF; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 18px clamp(20px, 4vw, 40px); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; position: sticky; top: 0; z-index: 20;">
+    <a href="Home.dc.html" style="font-family: Newsreader, serif; font-size: clamp(20px, 4vw, 22px); letter-spacing: 0.01em; text-transform: none;">Wednesday</a>
+    <div style="display: flex; align-items: center; gap: clamp(14px, 2.6vw, 26px);">
+      <a href="Pieces.dc.html">Pieces</a>
+      <a href="About.dc.html">About</a>
+      <a href="Contact.dc.html" style="background: #EFF1E8; color: #3C5142; padding: 10px 16px; white-space: nowrap;">Get in touch</a>
+    </div>
+  </div>
+
+  <div style="position: relative; min-height: min(700px, 92svh); display: flex; flex-direction: column; justify-content: flex-end; background-image: url('photos/slatted-tv-cabinet-01.jpeg'); background-size: cover; background-position: center 62%;">
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,17,13,0.2) 0%, rgba(20,17,13,0.08) 34%, rgba(20,17,13,0.62) 100%);"></div>
+    <div style="position: absolute; inset: 0; background: radial-gradient(ellipse 60% 45% at 68% 30%, rgba(20,17,13,0.32) 0%, rgba(20,17,13,0) 70%);"></div>
+
+    <div style="position: relative; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 28px; padding: clamp(40px, 8vw, 56px) clamp(20px, 4vw, 40px) clamp(28px, 5vw, 40px);">
+      <div style="display: flex; flex-direction: column; gap: 10px; flex: 1 1 300px; max-width: 340px;">
+        <a href="Pieces.dc.html" style="display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 54px; background: #3C5142; color: #FFFFFF; padding: 16px 22px; font-size: 13.5px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; box-shadow: 0 6px 18px rgba(20,17,13,0.28);"><span style="white-space: nowrap;">See all pieces</span><span>→</span></a>
+        <a href="Contact.dc.html#own-idea" style="display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 54px; background: {{ ownIdeaBg }}; color: {{ ownIdeaFg }}; padding: 16px 22px; font-size: 13.5px; letter-spacing: 0.08em; text-transform: uppercase;"><span style="white-space: nowrap;">I have my own idea</span><span>→</span></a>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 7px; flex: 0 1 auto; text-align: right; padding-bottom: 6px;">
+        <span style="display: block; font-family: 'IBM Plex Mono', monospace; font-size: 12px; line-height: 1.2; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; color: rgba(255,255,255,0.92)">No. 01 · Slatted TV Cabinet</span>
+        <span style="display: block; font-family: Newsreader, serif; font-weight: 300; font-size: 16px; line-height: 1.3; white-space: nowrap; color: rgba(255,255,255,0.92)">Spruce, hand-slatted doors, oiled</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="background: #3C5142; color: #FFFFFF; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(28px, 5vw, 64px); padding: clamp(48px, 8vw, 88px) clamp(20px, 4vw, 40px);">
+    <p style="margin: 0; font-family: Newsreader, serif; font-weight: 300; font-size: clamp(27px, 4.5vw, 34px); line-height: 1.25; text-wrap: pretty;">Wednesday is one maker, one workshop — furniture built for the room it goes in.</p>
+    <p style="margin: 0; font-size: 18px; line-height: 1.75; color: rgba(255,255,255,0.82); text-wrap: pretty">I work mostly in solid spruce and pine: cabinets, tables, shelves and light fittings, cut and joined by hand and finished with hardwax oil. Nothing is a fixed catalogue — every piece below has been made once, and can be made again to your measurements.</p>
+  </div>
+
+  <div>
+    <div style="display: flex; justify-content: space-between; gap: 20px; padding: clamp(24px, 5vw, 32px) clamp(20px, 4vw, 40px) 12px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A7B67;">
+      <span>Made so far</span><span>Starting from</span>
+    </div>
+    <sc-for list="{{ pieces }}" as="row" hint-placeholder-count="4">
+      <a href="{{ row.href }}" style="display: grid; grid-template-columns: 96px minmax(0, 1fr) auto; align-items: center; column-gap: clamp(16px, 3vw, 24px); row-gap: 4px; padding: 16px clamp(20px, 4vw, 40px); border-top: 1px solid #E6DED0;">
+        <div style="grid-row: span 2; aspect-ratio: 4/3; background-image: url('{{ row.img }}'); background-size: cover; background-position: {{ row.pos }};"></div>
+        <span style="font-family: Newsreader, serif; font-size: clamp(21px, 3.4vw, 24px);">{{ row.name }}</span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; text-align: right; color: #3C5142; white-space: nowrap;">{{ row.price }}</span>
+        <span style="grid-column: 2 / span 2; font-size: 14px; color: #6B5F50; text-wrap: pretty;">{{ row.note }}</span>
+      </a>
+    </sc-for>
+    <div style="border-top: 1px solid #E6DED0; padding: clamp(24px, 4vw, 32px) clamp(20px, 4vw, 40px);">
+      <a href="Pieces.dc.html" style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #3C5142; border-bottom: 1px solid #3C5142; padding-bottom: 3px;">See every piece →</a>
+    </div>
+  </div>
+
+  <div style="background: #E9EBE0; border-top: 1px solid #3C5142; padding: clamp(26px, 4vw, 34px) clamp(20px, 4vw, 40px); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;">
+    <span style="font-family: Newsreader, serif; font-size: clamp(18px, 2.6vw, 22px); color: #24301F; text-wrap: pretty;">Also available for home maintenance, DIY jobs and hanging &amp; mounting work.</span>
+    <a href="Contact.dc.html#small-job" style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.08em; background: #3C5142; color: #FFFFFF; padding: 12px 20px; white-space: nowrap;">Ask about it →</a>
+  </div>
+
+  <div style="background: #3C5142; color: rgba(255,255,255,0.78); padding: clamp(28px, 5vw, 34px) clamp(20px, 4vw, 40px) clamp(34px, 6vw, 44px); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;">
+    <span>Wednesday · Utrecht, NL</span>
+    <div style="display: flex; gap: 20px;"><a href="Contact.dc.html">Instagram</a><a href="Contact.dc.html">contact@wednesdayfurniture.com</a></div>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;ownIdeaMatchesNav&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Buttons&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      pieces: [
+        { no: "01", name: "Slatted TV Cabinet", note: "Spruce, slatted doors, tapered legs", price: "from €890", img: "photos/slatted-tv-cabinet-01.jpeg", pos: "62% 68%", href: "Piece.dc.html#slatted-tv-cabinet" },
+        { no: "02", name: "Pendant Beam", note: "1,8 m solid pine light over your table", price: "from €240", img: "photos/pendant-beam-01.jpeg", pos: "45% 45%", href: "Piece.dc.html#pendant-beam" },
+        { no: "03", name: "Pool Table Dining Top", note: "Two-part top, lifts off in a minute", price: "from €420", img: "photos/pool-table-dining-top-01.jpeg", pos: "center 45%", href: "Piece.dc.html#pool-table-dining-top" },
+        { no: "04", name: "Floating Wall Shelves", note: "Full-wall pine, hidden fixings", price: "from €120", img: "photos/slatted-tv-cabinet-01.jpeg", pos: "22% 48%", href: "Piece.dc.html#floating-wall-shelves" }
+      ],
+      ownIdeaBg: this.props.ownIdeaMatchesNav ?? true ? "#EFF1E8" : "#8FA688",
+      ownIdeaFg: this.props.ownIdeaMatchesNav ?? true ? "#3C5142" : "#1F2A1C"
+    };
+  }
+}
+</script>
+</body>
+</html>
