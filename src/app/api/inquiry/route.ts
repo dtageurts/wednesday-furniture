@@ -7,13 +7,16 @@ export const runtime = "nodejs";
 interface InquiryPayload {
   name: string;
   email: string;
-  city: string;
+  address: string;
   dimensions?: string;
   message: string;
+  topic?: string;
   pieceSlug?: string;
   pieceName?: string;
   wood?: string;
   varnish?: boolean;
+  delivery?: "pickup" | "deliver";
+  total?: number;
   source: "home" | "piece-detail" | "services" | "contact";
   // honeypot — real users never fill this in
   company?: string;
@@ -42,8 +45,8 @@ export async function POST(req: NextRequest) {
   if (!body.email || !isValidEmail(body.email)) {
     return NextResponse.json({ error: "That email address doesn't look right." }, { status: 400 });
   }
-  if (!body.city?.trim()) {
-    return NextResponse.json({ error: "Please add your city." }, { status: 400 });
+  if (!body.address?.trim()) {
+    return NextResponse.json({ error: "Please add your address." }, { status: 400 });
   }
   if (!body.message || body.message.trim().length < 10) {
     return NextResponse.json({ error: "A sentence or two helps a lot." }, { status: 400 });
@@ -52,13 +55,16 @@ export async function POST(req: NextRequest) {
   const record = {
     name: body.name.trim(),
     email: body.email.trim(),
-    city: body.city.trim(),
+    address: body.address.trim(),
     dimensions: body.dimensions?.trim() || null,
     message: body.message.trim(),
+    topic: body.topic ?? null,
     pieceSlug: body.pieceSlug ?? null,
     pieceName: body.pieceName ?? null,
     wood: body.wood ?? null,
     varnish: body.varnish ?? false,
+    delivery: body.delivery ?? null,
+    total: body.total ?? null,
     imageUrl: null as string | null,
     source: body.source,
     userAgent: req.headers.get("user-agent") ?? null,
@@ -99,15 +105,17 @@ export async function POST(req: NextRequest) {
         from,
         to,
         replyTo: record.email,
-        subject: `New inquiry — ${record.pieceName ?? record.source}`,
+        subject: `New inquiry — ${record.topic ?? record.pieceName ?? record.source}`,
         text: [
           `Name: ${record.name}`,
           `Email: ${record.email}`,
-          `City: ${record.city}`,
+          `Address: ${record.address}`,
           record.dimensions ? `Dimensions: ${record.dimensions}` : null,
           record.pieceName ? `Piece: ${record.pieceName}` : null,
           record.wood ? `Wood: ${record.wood}` : null,
           record.pieceName ? `Varnish: ${record.varnish ? "yes" : "no"}` : null,
+          record.delivery ? `Delivery: ${record.delivery === "deliver" ? "Deliver in Amsterdam" : "Pick up"}` : null,
+          record.total ? `Estimated total: € ${record.total}` : null,
           `Source: ${record.source}`,
           "",
           record.message,

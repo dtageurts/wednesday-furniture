@@ -4,52 +4,36 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { pieces, euro, getPiece, optionPrice, type Wood } from "@/lib/pieces";
-import { varnishPrice } from "@/lib/pricing";
-import { DIAGONAL_GREEN } from "@/lib/ui";
+import { varnishPrice, DELIVERY_PRICE } from "@/lib/pricing";
 
-const TOPICS = ["A piece of furniture", "Something new / my own idea", "A small job"] as const;
-type Topic = (typeof TOPICS)[number];
+const TOPICS = [
+  { key: "furniture", label: "A piece of furniture", hint: "Anything I should know? Room, colour of the floor, deadline…" },
+  { key: "custom", label: "I have a piece in mind", hint: "Describe the piece: what it is for, where it goes, what you like about the photo." },
+  { key: "small-job", label: "A small job", hint: "What needs fixing, hanging or mounting?" },
+  { key: "testimonial", label: "Share a testimonial", hint: "How is it to live with? What do you use it for?" },
+] as const;
+type TopicKey = (typeof TOPICS)[number]["key"];
 
-const JOB_NAMES = [
-  "Hanging shelves, TV or art",
-  "Assembling flat-pack furniture",
-  "Small repairs & fixes",
-  "Other mounting & installation work",
-  "Something else — see my message",
-];
-
-const inputStyle: React.CSSProperties = {
-  minHeight: 48,
-  background: "var(--off-white)",
-  border: "1px solid #cfd3c4",
-  padding: "12px 14px",
-  fontSize: 15,
-};
-
-const fieldLabelStyle: React.CSSProperties = {
-  fontFamily: "var(--font-mono), monospace",
-  fontSize: 10,
-  letterSpacing: "0.14em",
-  textTransform: "uppercase",
-  color: "#5e6e58",
-};
+type Delivery = "pickup" | "deliver";
 
 export function ContactForm() {
   const searchParams = useSearchParams();
-  const [topic, setTopic] = useState<Topic>(TOPICS[0]);
+  const [topic, setTopic] = useState<TopicKey>("furniture");
   const [pieceSlug, setPieceSlug] = useState("");
-  const [dimensionIndex, setDimensionIndex] = useState<number | null>(null);
   const [wood, setWood] = useState<Wood | null>(null);
-  const [varnish, setVarnish] = useState(false);
+  const [size, setSize] = useState<number | null>(null);
+  const [fin, setFin] = useState<"raw" | "varnish" | null>(null);
+  const [del, setDel] = useState<Delivery | null>(null);
+
   const [form, setForm] = useState({
     name: "",
     email: "",
-    city: "",
+    address: "",
     dimensions: "",
     message: "",
-    job: "",
     company: "",
   });
+  const [photoCount, setPhotoCount] = useState(0);
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
@@ -58,63 +42,70 @@ export function ContactForm() {
   const selectedPiece = pieceSlug ? getPiece(pieceSlug) : undefined;
 
   useEffect(() => {
-    const t = searchParams.get("topic");
+    const t = searchParams.get("topic") as TopicKey | null;
+    if (t && TOPICS.some((x) => x.key === t)) setTopic(t);
+
     const pieceParam = searchParams.get("piece");
-    const dimensionParam = searchParams.get("dimension");
-    const woodParam = searchParams.get("wood") as Wood | null;
-    if (t === "own-idea") setTopic(TOPICS[1]);
-    else if (t === "small-job") setTopic(TOPICS[2]);
-    else if (pieceParam) {
-      const p = pieces.find((p) => p.slug === pieceParam);
-      if (p) {
-        setTopic(TOPICS[0]);
-        setPieceSlug(p.slug);
-        const chosenWood =
-          p.woodOptions && woodParam && p.woodOptions.some((w) => w.key === woodParam)
-            ? woodParam
-            : p.woodOptions
-            ? p.woodOptions[0].key
-            : null;
-        setWood(chosenWood);
-        const idx = dimensionParam ? parseInt(dimensionParam, 10) : NaN;
-        if (!Number.isNaN(idx) && p.options[idx]) {
-          setDimensionIndex(idx);
-          setForm((f) => ({
-            ...f,
-            message: `Hi, I'd like to order the ${p.name} (${p.options[idx].dims}${
-              chosenWood ? `, ${chosenWood}` : ""
-            }).`,
-          }));
-        }
-      }
+    const p = pieceParam ? pieces.find((x) => x.slug === pieceParam) : undefined;
+    if (p) {
+      setTopic("furniture");
+      setPieceSlug(p.slug);
+      const woodParam = searchParams.get("wood") as Wood | null;
+      const chosenWood = p.woodOptions ? (woodParam && p.woodOptions.some((w) => w.key === woodParam) ? woodParam : p.woodOptions[0].key) : null;
+      setWood(chosenWood);
+      const sizeIdx = parseInt(searchParams.get("size") ?? "", 10);
+      if (!Number.isNaN(sizeIdx) && p.options[sizeIdx]) setSize(sizeIdx);
+      const finParam = searchParams.get("fin");
+      if (finParam === "raw" || finParam === "varnish") setFin(finParam);
+      const delParam = searchParams.get("del");
+      if (delParam === "pickup" || delParam === "deliver") setDel(delParam);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   const field =
     (key: keyof typeof form) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setForm((f) => ({ ...f, [key]: e.target.value }));
       setError("");
     };
 
-  const dimensionText = selectedPiece && dimensionIndex !== null ? selectedPiece.options[dimensionIndex].dims : "";
-  const basePrice =
-    selectedPiece && dimensionIndex !== null
-      ? optionPrice(selectedPiece.options[dimensionIndex], wood ?? undefined)
-      : 0;
-  const varnishSurcharge = selectedPiece && varnish ? varnishPrice(selectedPiece.size) : 0;
-  const total = basePrice + varnishSurcharge;
+  const showFinish = !!selectedPiece && selectedPiece.varnishable !== false;
+  const basePrice = selectedPiece && size !== null ? optionPrice(selectedPiece.options[size], wood ?? undefined) : 0;
+  const varnishSurcharge = selectedPiece && showFinish && fin === "varnish" ? varnishPrice(selectedPiece.size) : 0;
+  const deliverySurcharge = del === "deliver" ? DELIVERY_PRICE : 0;
+  const total = basePrice + varnishSurcharge + deliverySurcharge;
+
+  function pieceStepsComplete() {
+    if (!selectedPiece) return false;
+    if (selectedPiece.woodOptions && !wood) return false;
+    if (size === null) return false;
+    if (showFinish && !fin) return false;
+    if (!del) return false;
+    return true;
+  }
+
+  const isFurniture = topic === "furniture";
+  const isTestimonial = topic === "testimonial";
+  const currentHint = TOPICS.find((t) => t.key === topic)!.hint;
+
+  function valid() {
+    return (
+      form.name.trim() &&
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim()) &&
+      form.address.trim() &&
+      form.message.trim().length >= 10 &&
+      (!isFurniture || pieceStepsComplete())
+    );
+  }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.name.trim()) return setError("Please add your name.");
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim()))
-      return setError("That email address doesn't look right.");
-    if (!form.city.trim()) return setError("Please add your city.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) return setError("That email address doesn't look right.");
+    if (!form.address.trim()) return setError("Please add your address.");
     if (form.message.trim().length < 10) return setError("A sentence or two helps a lot.");
-    if (topic === TOPICS[0] && !selectedPiece) return setError("Please choose a piece.");
-    if (topic === TOPICS[0] && dimensionIndex === null) return setError("Please choose a size.");
+    if (isFurniture && !pieceStepsComplete()) return setError("Please complete the steps above.");
 
     setSending(true);
     setError("");
@@ -125,13 +116,16 @@ export function ContactForm() {
         body: JSON.stringify({
           name: form.name,
           email: form.email,
-          city: form.city,
-          dimensions: topic === TOPICS[0] ? dimensionText : form.dimensions,
+          address: form.address,
+          dimensions: isFurniture && selectedPiece && size !== null ? selectedPiece.options[size].dims : form.dimensions,
           message: form.message,
-          pieceSlug: topic === TOPICS[0] ? selectedPiece?.slug : undefined,
-          pieceName: topic === TOPICS[0] ? selectedPiece?.name : undefined,
-          wood: topic === TOPICS[0] ? wood ?? undefined : undefined,
-          varnish: topic === TOPICS[0] ? varnish : undefined,
+          topic: TOPICS.find((t) => t.key === topic)!.label,
+          pieceSlug: isFurniture ? selectedPiece?.slug : undefined,
+          pieceName: isFurniture ? selectedPiece?.name : undefined,
+          wood: isFurniture ? wood ?? undefined : undefined,
+          varnish: isFurniture ? fin === "varnish" : undefined,
+          delivery: isFurniture ? del ?? undefined : undefined,
+          total: isFurniture ? total : undefined,
           source: "contact",
           company: form.company,
         }),
@@ -155,46 +149,32 @@ export function ContactForm() {
     setSent(false);
     setError("");
     setPieceSlug("");
-    setDimensionIndex(null);
     setWood(null);
-    setVarnish(false);
-    setForm({ name: "", email: "", city: "", dimensions: "", message: "", job: "", company: "" });
+    setSize(null);
+    setFin(null);
+    setDel(null);
+    setPhotoCount(0);
+    setForm({ name: "", email: "", address: "", dimensions: "", message: "", company: "" });
   }
 
   if (sent) {
     return (
-      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-        <span className="label" style={{ color: "var(--green)" }}>
-          Message sent
-        </span>
-        <h2
-          style={{
-            margin: 0,
-            fontFamily: "var(--font-serif), serif",
-            fontWeight: 300,
-            fontSize: "clamp(26px, 4vw, 32px)",
-            color: "#24301f",
-          }}
-        >
-          Thanks — I&rsquo;ve got it.
+      <div className="thanks tone tone-forest">
+        <h2 className="h">
+          Thanks — <em>got it.</em>
         </h2>
-        <p style={{ margin: 0, fontSize: 15, lineHeight: 1.75, color: "#4a5545" }}>
-          {`${sentName ? sentName + ", your" : "Your"} message is in — filed under "${topic.toLowerCase()}". I'll reply to ${form.email} within a couple of days.`}
+        <p>
+          {sentName ? `${sentName}, your` : "Your"} {isTestimonial ? "testimonial" : "message"} is in. I&rsquo;ll read it properly and reply within 2 working days.
         </p>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 12, paddingTop: 6 }}>
-          <Link href="/pieces" className="btn btn-primary">
-            Browse the pieces
-          </Link>
-          <button type="button" onClick={reset} className="btn btn-outline">
-            Send another
-          </button>
-        </div>
+        <button type="button" className="btn btn-ghost" onClick={reset}>
+          Send another
+        </button>
       </div>
     );
   }
 
   return (
-    <form onSubmit={onSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+    <form className="form" onSubmit={onSubmit} noValidate>
       <input
         type="text"
         value={form.company}
@@ -205,45 +185,39 @@ export function ContactForm() {
         aria-hidden="true"
       />
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        <span style={fieldLabelStyle}>What is it about? *</span>
-        <div className="topic-buttons" style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+      <div className="field">
+        <span className="field-label">What is it about? *</span>
+        <div className="topics">
           {TOPICS.map((t) => (
             <button
-              key={t}
+              key={t.key}
               type="button"
-              onClick={() => setTopic(t)}
-              style={{
-                minHeight: 44,
-                padding: "11px 16px",
-                fontSize: 13,
-                cursor: "pointer",
-                border: "1px solid var(--green)",
-                background: topic === t ? DIAGONAL_GREEN : "transparent",
-                color: topic === t ? "var(--green-fg)" : "var(--green)",
-              }}
+              className={`opt${topic === t.key ? " on" : ""}`}
+              aria-pressed={topic === t.key}
+              onClick={() => setTopic(t.key)}
             >
-              {t}
+              <span>{t.label}</span>
             </button>
           ))}
         </div>
       </div>
 
-      {topic === TOPICS[0] && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            <span style={fieldLabelStyle}>Which piece? *</span>
+      {isFurniture && (
+        <div className="piece-fields">
+          <label className="field">
+            <span className="field-label">Which piece? *</span>
             <select
+              className="input"
               value={pieceSlug}
               onChange={(e) => {
                 const p = pieces.find((x) => x.slug === e.target.value);
                 setPieceSlug(e.target.value);
-                setDimensionIndex(null);
                 setWood(p?.woodOptions ? p.woodOptions[0].key : null);
-                setVarnish(false);
+                setSize(null);
+                setFin(null);
+                setDel(null);
                 setError("");
               }}
-              style={inputStyle}
             >
               <option value="">Choose a piece…</option>
               {pieces.map((p) => (
@@ -254,156 +228,111 @@ export function ContactForm() {
             </select>
           </label>
 
-          {selectedPiece?.woodOptions && (
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              <span style={fieldLabelStyle}>Wood *</span>
-              <div style={{ display: "flex", gap: 8 }}>
-                {selectedPiece.woodOptions.map((w) => (
-                  <button
-                    key={w.key}
-                    type="button"
-                    onClick={() => setWood(w.key)}
-                    style={{
-                      flex: 1,
-                      minHeight: 44,
-                      padding: "10px 14px",
-                      fontSize: 13,
-                      cursor: "pointer",
-                      border: "1px solid var(--green)",
-                      background: wood === w.key ? DIAGONAL_GREEN : "transparent",
-                      color: wood === w.key ? "var(--green-fg)" : "var(--green)",
-                    }}
-                  >
-                    {w.label}
+          {selectedPiece && (() => {
+            let n = 0;
+            const woodN = selectedPiece.woodOptions ? ++n : 0;
+            const sizeN = ++n;
+            const finN = showFinish ? ++n : 0;
+            const delN = ++n;
+            return (
+            <>
+              {selectedPiece.woodOptions && (
+                <div className="field">
+                  <span className="field-label">{woodN} · Wood *</span>
+                  <div className="opts-row">
+                    {selectedPiece.woodOptions.map((w) => (
+                      <button key={w.key} type="button" className={`opt${wood === w.key ? " on" : ""}`} aria-pressed={wood === w.key} onClick={() => setWood(w.key)}>
+                        <span>{w.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="field">
+                <span className="field-label">{sizeN} · Size *</span>
+                {selectedPiece.options.map((opt, i) => (
+                  <button key={i} type="button" className={`opt${size === i ? " on" : ""}`} aria-pressed={size === i} onClick={() => setSize(i)}>
+                    <span>{opt.dims}</span>
+                    <b>{euro(optionPrice(opt, wood ?? undefined))}</b>
                   </button>
                 ))}
               </div>
-            </div>
-          )}
 
-          {selectedPiece && (
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              <span style={fieldLabelStyle}>Size *</span>
-              {selectedPiece.options.map((opt, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setDimensionIndex(i)}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    gap: 10,
-                    border: "1px solid #cfc6b4",
-                    background: dimensionIndex === i ? "#dce0d0" : "#f3eee3",
-                    padding: "11px 14px",
-                    font: "inherit",
-                    textAlign: "left",
-                    cursor: "pointer",
-                  }}
-                >
-                  <span style={{ fontSize: 14 }}>
-                    {opt.dims} <span style={{ color: "var(--muted)" }}>·</span>{" "}
-                    <strong>{euro(optionPrice(opt, wood ?? undefined))}</strong>
-                  </span>
+              {showFinish && (
+                <div className="field">
+                  <span className="field-label">{finN} · Finish *</span>
+                  <button type="button" className={`opt${fin === "raw" ? " on" : ""}`} aria-pressed={fin === "raw"} onClick={() => setFin("raw")}>
+                    <span>Unfinished</span>
+                    <b>+ {euro(0)}</b>
+                  </button>
+                  <button type="button" className={`opt${fin === "varnish" ? " on" : ""}`} aria-pressed={fin === "varnish"} onClick={() => setFin("varnish")}>
+                    <span>Varnished</span>
+                    <b>+ {euro(varnishPrice(selectedPiece.size))}</b>
+                  </button>
+                </div>
+              )}
+
+              <div className="field">
+                <span className="field-label">{delN} · Delivery *</span>
+                <button type="button" className={`opt${del === "pickup" ? " on" : ""}`} aria-pressed={del === "pickup"} onClick={() => setDel("pickup")}>
+                  <span>I&rsquo;ll pick it up</span>
+                  <b>+ {euro(0)}</b>
                 </button>
-              ))}
-            </div>
-          )}
+                <button type="button" className={`opt${del === "deliver" ? " on" : ""}`} aria-pressed={del === "deliver"} onClick={() => setDel("deliver")}>
+                  <span>Deliver in Amsterdam, please</span>
+                  <b>+ {euro(DELIVERY_PRICE)}</b>
+                </button>
+              </div>
 
-          {selectedPiece && dimensionIndex !== null && (
-            <button
-              type="button"
-              onClick={() => setVarnish((v) => !v)}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                gap: 10,
-                border: "1px solid #cfc6b4",
-                background: varnish ? "#dce0d0" : "#f3eee3",
-                padding: "11px 14px",
-                font: "inherit",
-                textAlign: "left",
-                cursor: "pointer",
-              }}
-            >
-              <span style={{ fontSize: 14 }}>Add varnish (+{euro(varnishPrice(selectedPiece.size))})</span>
-              <span
-                className="label"
-                style={{ fontSize: 10, color: varnish ? "var(--green)" : "var(--muted)", whiteSpace: "nowrap" }}
-              >
-                {varnish ? "Added" : "Add"}
-              </span>
-            </button>
-          )}
-
-          {selectedPiece && dimensionIndex !== null && (
-            <div style={{ fontSize: 13, color: "var(--green)", fontWeight: 600 }}>Total: {euro(total)}</div>
-          )}
+              {size !== null && <div style={{ fontSize: 13, color: "var(--forest)", fontWeight: 600 }}>Total: {euro(total)}</div>}
+            </>
+            );
+          })()}
         </div>
       )}
 
-      {topic === TOPICS[2] && (
-        <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          <span style={fieldLabelStyle}>What kind of job? *</span>
-          <select value={form.job} onChange={field("job")} style={inputStyle}>
-            <option value="">Choose one…</option>
-            {JOB_NAMES.map((j) => (
-              <option key={j} value={j}>
-                {j}
-              </option>
-            ))}
-          </select>
+      <div className="fields">
+        <label className="field">
+          <span className="field-label">Name *</span>
+          <input className="input" type="text" value={form.name} onChange={field("name")} placeholder="Your name" />
         </label>
-      )}
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: 16 }}>
-        <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          <span style={fieldLabelStyle}>Name *</span>
-          <input type="text" value={form.name} onChange={field("name")} placeholder="Your name" style={inputStyle} />
+        <label className="field">
+          <span className="field-label">Email *</span>
+          <input className="input" type="email" value={form.email} onChange={field("email")} placeholder="you@email.com" />
         </label>
-        <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          <span style={fieldLabelStyle}>Email *</span>
-          <input type="email" value={form.email} onChange={field("email")} placeholder="you@email.com" style={inputStyle} />
+        <label className="field">
+          <span className="field-label">Address *</span>
+          <input className="input" type="text" value={form.address} onChange={field("address")} placeholder="Street, number, city" />
         </label>
-        <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          <span style={fieldLabelStyle}>City *</span>
-          <input type="text" value={form.city} onChange={field("city")} placeholder="Amsterdam" style={inputStyle} />
+        {(topic === "custom" || topic === "small-job") && (
+          <label className="field">
+            <span className="field-label">Dimensions</span>
+            <input className="input" type="text" value={form.dimensions} onChange={field("dimensions")} placeholder="e.g. 160 × 60 × 75 cm" />
+          </label>
+        )}
+        <label className="field">
+          <span className="field-label">Message *</span>
+          <textarea className="input" rows={5} value={form.message} onChange={field("message")} placeholder={currentHint} />
         </label>
-        {topic !== TOPICS[0] && (
-          <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            <span style={fieldLabelStyle}>Dimensions</span>
-            <input
-              type="text"
-              value={form.dimensions}
-              onChange={field("dimensions")}
-              placeholder="e.g. 180 × 45 × 40 cm"
-              style={inputStyle}
-            />
+        {!isFurniture && (
+          <label className="field">
+            <span className="field-label">Photos (optional)</span>
+            <span className="drop">
+              <strong>{photoCount ? `${photoCount} photo${photoCount === 1 ? "" : "s"} added` : "+ Add photos"}</strong>
+              <span>{isTestimonial ? "A photo of the piece in your home — this is the part people trust most." : "A photo helps — of the space, or of a piece you already own."}</span>
+            </span>
+            <input type="file" accept="image/*" multiple hidden onChange={(e) => setPhotoCount(e.target.files?.length ?? 0)} />
           </label>
         )}
       </div>
 
-      <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-        <span style={fieldLabelStyle}>Message *</span>
-        <textarea
-          rows={5}
-          value={form.message}
-          onChange={field("message")}
-          placeholder="What you'd like made or done, and where it goes."
-          style={{ ...inputStyle, lineHeight: 1.6, resize: "vertical" }}
-        />
-      </label>
+      {error && <p className="form-error">{error}</p>}
 
-      {error && <span style={{ fontSize: 13, color: "#8c3a2b" }}>{error}</span>}
-
-      <button type="submit" disabled={sending} className="btn btn-primary" style={{ minHeight: 54 }}>
-        {sending ? "Sending…" : "Send message"}
+      <button type="submit" className="btn btn-send tone tone-eclipse" disabled={sending || !valid()}>
+        {sending ? "Sending…" : valid() ? (isTestimonial ? "Send testimonial" : "Send request") : "Fill in all fields marked *"}
       </button>
-      <span style={{ fontSize: 12, lineHeight: 1.6, color: "#6e7a68" }}>
-        Your details are used only to answer this message.
-      </span>
+      <p className="form-note">Your details are used only to answer this request.</p>
     </form>
   );
 }

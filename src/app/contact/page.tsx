@@ -1,8 +1,11 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import type { Metadata } from "next";
 import { Nav } from "@/components/Nav";
 import { SiteFooter } from "@/components/Footer";
 import { ContactForm } from "@/components/ContactForm";
+import { DELIVERY_PRICE } from "@/lib/pricing";
+import { euro } from "@/lib/pieces";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -11,40 +14,40 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div style={{ display: "flex", flexDirection: "column", minHeight: "100svh" }}>
+    <div className="page">
       <Nav active="contact" />
-
-      <div
-        className="contact-grid"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: "clamp(28px, 5vw, 64px)",
-          padding: "clamp(44px, 7vw, 80px) clamp(20px, 4vw, 40px) clamp(32px, 5vw, 48px)",
-          alignItems: "start",
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-          <span className="label" style={{ color: "var(--green)" }}>
-            Tell me about the job.
-          </span>
-          <h1
-            style={{
-              margin: 0,
-              fontFamily: "var(--font-serif), serif",
-              fontWeight: 300,
-              fontSize: "clamp(32px, 5.4vw, 48px)",
-              lineHeight: 1.05,
-            }}
-          >
-            I will reply within 2 working days.
+      <div className="contact">
+        <div className="contact-intro">
+          <h1 className="h">
+            Tell me about <em>the job.</em>
           </h1>
+          <p className="lead">I&rsquo;ll reply within 2 working days.</p>
+          <dl className="specs desk-only">
+            <div className="spec">
+              <dt>Delivery</dt>
+              <dd>Amsterdam {euro(DELIVERY_PRICE)}</dd>
+            </div>
+            <div className="spec">
+              <dt>Pick up</dt>
+              <dd>Free, at the workshop</dd>
+            </div>
+            <div className="spec">
+              <dt>Lead time</dt>
+              <dd>3–5 weeks</dd>
+            </div>
+          </dl>
+          <Link className="share desk-only" href="/contact?topic=testimonial">
+            Already own a piece? <span>Tell me what it&rsquo;s like to live with</span>
+          </Link>
         </div>
 
-        <div style={{ background: "var(--sage)", padding: "clamp(24px, 4vw, 40px)" }}>
+        <div>
           <Suspense fallback={null}>
             <ContactForm />
           </Suspense>
+          <Link className="share contact-share mob-only" href="/contact?topic=testimonial">
+            Already own a piece? <span>Tell me what it&rsquo;s like to live with</span>
+          </Link>
         </div>
       </div>
 

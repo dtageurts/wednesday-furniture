@@ -1,12 +1,4 @@
 import type { Metadata } from "next";
-import "@fontsource/newsreader/300.css";
-import "@fontsource/newsreader/400.css";
-import "@fontsource/archivo/400.css";
-import "@fontsource/archivo/500.css";
-import "@fontsource/archivo/600.css";
-import "@fontsource/ibm-plex-mono/400.css";
-import "@fontsource/ibm-plex-mono/500.css";
-import "@fontsource/mrs-saint-delafield/400.css";
 import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://wednesdayfurniture.com";
@@ -14,15 +6,15 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://wednesdayfurniture.
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Wednesday — Furniture made in Utrecht",
+    default: "Wednesday — solid wood furniture, made by hand in Amsterdam",
     template: "%s · Wednesday",
   },
   description:
-    "Wednesday is one maker, one workshop in Utrecht — furniture built for the room it goes in. Solid spruce and pine, cut and joined by hand.",
+    "Solid wood furniture made by hand in Amsterdam by one maker. Pieces in fixed sizes, or send a photo of what you have in mind.",
   openGraph: {
-    title: "Wednesday — Furniture made in Utrecht",
+    title: "Wednesday — solid wood furniture, made by hand in Amsterdam",
     description:
-      "Furniture built for the room it goes in. Solid spruce and pine, cut and joined by hand.",
+      "Solid wood furniture made by hand in Amsterdam by one maker. Pieces in fixed sizes, or send a photo of what you have in mind.",
     url: siteUrl,
     siteName: "Wednesday",
     locale: "en_GB",
@@ -40,7 +32,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body style={{ fontFamily: "var(--font-sans), sans-serif" }}>
+      <head>
+        <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link
+          href="https://api.fontshare.com/v2/css?f[]=gambetta@400,500,400i&f[]=general-sans@400,500,600&display=swap"
+          rel="stylesheet"
+        />
+        <link href="https://fonts.googleapis.com/css2?family=Mrs+Saint+Delafield&display=swap" rel="stylesheet" />
+      </head>
+      <body>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -48,8 +50,9 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "LocalBusiness",
               name: "Wednesday",
-              description: "Furniture maker in Utrecht, NL — made-to-measure cabinets, tables, shelves and light fittings.",
-              areaServed: "Utrecht, NL",
+              description:
+                "Furniture maker in Amsterdam, NL — made-to-measure cabinets, tables, shelves and light fittings.",
+              areaServed: "Amsterdam, NL",
               email: "contact@wednesdayfurniture.com",
               url: siteUrl,
             }),

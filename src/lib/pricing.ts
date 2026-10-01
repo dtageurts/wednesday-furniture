@@ -10,6 +10,10 @@ export function varnishPrice(size: "small" | "big"): number {
   return VARNISH_PRICE[size];
 }
 
+// Flat delivery fee for the piece-builder / contact-form price estimate —
+// pickup at the workshop stays free. Confirmed with Douwe (redesign handoff).
+export const DELIVERY_PRICE = 40;
+
 // Reference numbers behind every price in pieces.json — kept here so the
 // pricing logic (and the reasoning) lives in one place, not just spreadsheet
 // history. Prices in pieces.json are computed offline from these and stored

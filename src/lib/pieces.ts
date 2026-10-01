@@ -31,6 +31,10 @@ export interface Piece {
   no: string;
   name: string;
   note: string;
+  keyword?: string;
+  // Whether a varnished-finish option makes sense for this piece (defaults to
+  // true). False for the glass coffee table — its oil finish isn't optional.
+  varnishable?: boolean;
   startingFrom: number;
   size: "small" | "big";
   description: string;

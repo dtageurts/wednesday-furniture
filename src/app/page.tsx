@@ -1,107 +1,59 @@
 import Link from "next/link";
-import Image from "next/image";
 import { SiteFooter } from "@/components/Footer";
 import { HeroCarousel } from "@/components/HeroCarousel";
-import { pieces, euro } from "@/lib/pieces";
-import { DIAGONAL_GREEN_WIDE } from "@/lib/ui";
+import { PiecesCarousel } from "@/components/PiecesCarousel";
+import { TestimonialCarousel } from "@/components/TestimonialCarousel";
+import { pieces } from "@/lib/pieces";
+import { testimonials } from "@/lib/testimonials";
 
 export default function HomePage() {
+  const heroPieces = pieces.slice(0, 4);
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", minHeight: "100svh" }}>
-      <HeroCarousel pieces={pieces} />
+    <div className="page">
+      <HeroCarousel pieces={heroPieces} />
 
-      <div
-        style={{
-          background: DIAGONAL_GREEN_WIDE,
-          color: "#fff",
-          minHeight: "35svh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          textAlign: "center",
-          gap: "clamp(16px, 4vw, 28px)",
-          paddingTop: "clamp(10px, 2.2vw, 20px)",
-          paddingBottom: "clamp(28px, 6vw, 48px)",
-          paddingLeft: "clamp(20px, 4vw, 40px)",
-          paddingRight: "clamp(20px, 4vw, 40px)",
-        }}
-      >
-        <p
-          style={{
-            margin: 0,
-            maxWidth: "72ch",
-            fontSize: "clamp(15px, 2.6vw, 20px)",
-            lineHeight: 1.7,
-            color: "rgba(255,255,255,0.9)",
-          }}
-        >
-          <strong style={{ fontWeight: 600, color: "#fff" }}>
-            Everything here is made by hand
-          </strong>
-          , no factory to pump out the same thing. Solid wood, no wood pulp. I prefer wood
-          joints over screws. Wood varies by piece, but I mainly use oak, beech, spruce and
-          pine; I pick what suits the piece, but if there&rsquo;s more than one option,
-          it&rsquo;s up to you. That means no two pieces are ever quite the same.
-        </p>
-        <p
-          style={{
-            margin: 0,
-            maxWidth: "72ch",
-            fontSize: "clamp(15px, 2.6vw, 20px)",
-            lineHeight: 1.7,
-            color: "rgba(255,255,255,0.9)",
-          }}
-        >
-          Every piece comes in two or three fixed sizes. If you need something different, get
-          in touch and we&rsquo;ll talk about it.
-        </p>
-        <svg width="18" height="11" viewBox="0 0 18 11" fill="none" aria-hidden="true" style={{ opacity: 0.75 }}>
-          <path d="M1 1L9 9L17 1" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </div>
-
-      <div>
-        {pieces.map((p) => (
-          <Link
-            key={p.slug}
-            href={`/pieces/${p.slug}`}
-            style={{
-              display: "grid",
-              gridTemplateColumns: "96px minmax(0, 1fr)",
-              alignItems: "center",
-              columnGap: "clamp(16px, 3vw, 24px)",
-              rowGap: 4,
-              padding: "16px clamp(20px, 4vw, 40px)",
-              borderTop: "1px solid var(--rule)",
-            }}
-          >
-            <div style={{ gridRow: "span 3", position: "relative", aspectRatio: "4 / 3" }}>
-              <Image
-                src={p.images[0].src}
-                alt={p.images[0].alt}
-                fill
-                sizes="96px"
-                style={{ objectFit: "cover", objectPosition: p.images[0].position }}
-              />
+      <section className="banner tone tone-forest">
+        <h1 className="h">
+          Solid wood, <em>made by hand.</em>
+        </h1>
+        <div className="banner-side">
+          <p>No factory, no wood pulp. Every piece comes in two or three fixed sizes. Need something different? Get in touch.</p>
+          <div className="group">
+            <span className="label">How I work</span>
+            <div className="tags">
+              <span className="tag tag-outline">Wood joints over screws</span>
+              <span className="tag tag-outline">Solid wood only</span>
+              <span className="tag tag-outline">One maker</span>
+              <span className="tag tag-outline">Made to order</span>
             </div>
-            <span style={{ fontFamily: "var(--font-serif), serif", fontSize: "clamp(21px, 3.4vw, 24px)" }}>
-              {p.name}
-            </span>
-            <span style={{ fontSize: 14, color: "#6b5f50" }}>{p.note}</span>
-            <span
-              style={{
-                fontFamily: "var(--font-mono), monospace",
-                fontSize: 13,
-                color: "var(--green)",
-                whiteSpace: "nowrap",
-              }}
-            >
-              from {euro(p.startingFrom)}
-            </span>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="section-head">
+          <h2 className="h h-l">Pieces</h2>
+          <Link className="link" href="/pieces">
+            All pieces
           </Link>
-        ))}
-      </div>
+        </div>
+        <PiecesCarousel pieces={pieces} />
+      </section>
+
+      <section className="banner banner-sage">
+        <h2 className="h">
+          Also available for <em>maintenance.</em>
+        </h2>
+        <div className="banner-side">
+          <p>DIY, and hanging &amp; mounting work too. Tell me what needs doing.</p>
+          <Link className="btn btn-ivory" href="/contact?topic=small-job">
+            Contact me
+          </Link>
+        </div>
+      </section>
+
+      <TestimonialCarousel testimonials={testimonials} />
 
       <SiteFooter />
     </div>
