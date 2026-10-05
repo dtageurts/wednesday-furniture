@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact · Wednesday</title>
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=gambetta@400,500,400i&f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="page">
+  <div id="nav"></div>
+
+  <div class="contact">
+    <div class="contact-intro">
+      <h1 class="h h-xl">Tell me about <em>the job.</em></h1>
+      <p class="lead">I'll reply within 2 working days.</p>
+      <dl class="specs desk-only" id="infoSpecs"></dl>
+      <a class="share desk-only" href="contact.html?topic=testimonial">Already own a piece? <span>Tell me what it's like to live with</span></a>
+    </div>
+
+    <div>
+      <form class="form" id="form" novalidate>
+        <div class="field">
+          <span class="field-label">What is it about? *</span>
+          <div class="topics" id="topics"></div>
+        </div>
+
+        <div class="piece-fields" id="pieceFields">
+          <label class="field"><span class="field-label">Which piece? *</span>
+            <select class="input" id="pieceSelect" name="piece"><option value="">Choose a piece…</option></select>
+          </label>
+          <div id="pieceSteps" style="display:flex;flex-direction:column;gap:16px;"></div>
+        </div>
+
+        <div class="fields">
+          <label class="field"><span class="field-label">Name *</span><input class="input" type="text" name="name" id="name" autocomplete="name" required></label>
+          <label class="field"><span class="field-label">Email *</span><input class="input" type="email" name="email" id="email" autocomplete="email" required></label>
+          <label class="field"><span class="field-label">Address *</span><input class="input" type="text" name="address" id="address" autocomplete="street-address" required></label>
+          <label class="field" id="dimsField"><span class="field-label">Dimensions</span><input class="input" type="text" name="dimensions" placeholder="e.g. 160 × 60 × 75 cm"></label>
+          <label class="field"><span class="field-label">Message *</span><textarea class="input" name="message" id="message" rows="5" required></textarea></label>
+          <label class="field" id="photosField"><span class="field-label">Photos (optional)</span>
+            <span class="drop"><strong id="fileLabel">+ Add photos</strong><span id="fileHint">A photo helps — of the space, or of a piece you already own.</span></span>
+            <input type="file" name="photos" id="photos" accept="image/*" multiple hidden>
+          </label>
+        </div>
+
+        <button class="btn btn-primary btn-send" id="sendBtn" type="submit" disabled>Fill in all fields marked *</button>
+        <p class="form-error" id="formError" hidden></p>
+        <p class="form-note">Your details are used only to answer this request.</p>
+      </form>
+
+      <div class="thanks tone tone-forest tone-flat" id="thanks" hidden>
+        <h2 class="h h-m">Thanks — <em>got it.</em></h2>
+        <p id="thanksText">I'll read it properly and reply within 2 working days.</p>
+        <button class="btn btn-light" id="again" type="button">Send another</button>
+      </div>
+
+      <a class="share contact-share mob-only" href="contact.html?topic=testimonial">Already own a piece? <span>Tell me what it's like to live with</span></a>
+    </div>
+  </div>
+
+  <div id="footer"></div>
+</div>
+<script src="data.js"></script>
+<script>
+  mountChrome("Contact", { services: false });
+  document.getElementById("infoSpecs").innerHTML =
+    '<div class="spec"><dt>Delivery</dt><dd>Amsterdam ' + euro(DELIVERY_PRICE) + '</dd></div>' +
+    '<div class="spec"><dt>Pick up</dt><dd>Free, at the workshop</dd></div>' +
+    '<div class="spec"><dt>Lead time</dt><dd>3–5 weeks</dd></div>';
+
+  const TOPICS = [
+    { key: "furniture", label: "A piece of furniture", hint: "Anything I should know? Room, colour of the floor, deadline…" },
+    { key: "custom", label: "I have a piece in mind", hint: "Describe the piece: what it is for, where it goes, what you like about the photo." },
+    { key: "small-job", label: "A small job", hint: "What needs fixing, hanging or mounting?" },
+    { key: "testimonial", label: "Share a testimonial", hint: "How is it to live with? What do you use it for?" }
+  ];
+
+  const s = { topic: "furniture", piece: "", wood: null, size: null, fin: null, del: null };
+  // prefill from piece page / links
+  const qTopic = qs("topic"); if (TOPICS.some(t => t.key === qTopic)) s.topic = qTopic;
+  const qPiece = PIECES.find(p => p.slug === qs("piece"));
+  if (qPiece){
+    s.piece = qPiece.slug;
+    if (qPiece.woodOptions && qPiece.woodOptions.some(w => w.key === qs("wood"))) s.wood = qs("wood");
+    const qi = parseInt(qs("size"), 10); if (qi >= 0 && qi < qPiece.options.length) s.size = qi;
+    if (qPiece.varnishPrice && ["raw", "varnish"].includes(qs("fin"))) s.fin = qs("fin");
+    if (["pickup", "deliver"].includes(qs("del"))) s.del = qs("del");
+  }
+
+  const $ = id => document.getElementById(id);
+  const form = $("form"), sendBtn = $("sendBtn");
+  const pieceSelect = $("pieceSelect");
+  pieceSelect.innerHTML += PIECES.map(p => '<option value="' + p.slug + '">' + esc(p.name) + '</option>').join("");
+  const cur = () => PIECES.find(p => p.slug === s.piece);
+
+  function pieceStepDefs(p){
+    const d = [];
+    if (p.woodOptions) d.push({ key: "wood", title: "Wood", row: true, opts: p.woodOptions.map(w => ({ v: w.key, label: w.label })) });
+    d.push({ key: "size", title: "Size", opts: p.options.map((o, i) => ({ v: i, label: o.dims, sub: euro(optionPrice(o, s.wood)) })) });
+    if (p.varnishPrice) d.push({ key: "fin", title: "Finish", opts: [{ v: "raw", label: "Unfinished", sub: "+ € 0" }, { v: "varnish", label: "Varnished", sub: "+ " + euro(p.varnishPrice) }] });
+    d.push({ key: "del", title: "Delivery", opts: [{ v: "pickup", label: "I'll pick it up", sub: "+ € 0" }, { v: "deliver", label: "Deliver in Amsterdam, please", sub: "+ " + euro(DELIVERY_PRICE) }] });
+    return d;
+  }
+  const optBtn = (k, o, on) => '<button type="button" class="opt' + (on ? ' on' : '') + '" data-k="' + k + '" data-v="' + o.v + '" aria-pressed="' + on + '"><span>' + esc(o.label) + '</span>' + (o.sub ? '<b>' + o.sub + '</b>' : '') + '</button>';
+
+  function render(){
+    $("topics").innerHTML = TOPICS.map(t => optBtn("topic", { v: t.key, label: t.label }, s.topic === t.key)).join("");
+    const isFurniture = s.topic === "furniture";
+    $("pieceFields").hidden = !isFurniture;
+    $("dimsField").hidden = !(s.topic === "custom" || s.topic === "small-job");
+    $("photosField").hidden = isFurniture;
+    $("fileHint").textContent = s.topic === "testimonial" ? "A photo of the piece in your home — this is the part people trust most." : "A photo helps — of the space, or of a piece you already own.";
+    $("message").placeholder = TOPICS.find(t => t.key === s.topic).hint;
+    pieceSelect.value = s.piece;
+    const p = cur();
+    $("pieceSteps").innerHTML = p ? pieceStepDefs(p).map((d, i) => {
+      const opts = d.opts.map(o => optBtn(d.key, o, s[d.key] === o.v)).join("");
+      return '<div class="field"><span class="field-label">' + (i + 1) + ' · ' + d.title + ' *</span>' + (d.row ? '<div class="opts-row">' + opts + '</div>' : opts) + '</div>';
+    }).join("") : "";
+    validate();
+  }
+
+  function pieceComplete(){
+    const p = cur(); if (!p) return false;
+    return pieceStepDefs(p).every(d => s[d.key] !== null);
+  }
+  function validate(){
+    const ok = $("name").value.trim() && /.+@.+\..+/.test($("email").value.trim()) && $("address").value.trim() && $("message").value.trim() && (s.topic !== "furniture" || pieceComplete());
+    sendBtn.disabled = !ok;
+    sendBtn.textContent = ok ? (s.topic === "testimonial" ? "Send testimonial" : "Send request") : "Fill in all fields marked *";
+    return !!ok;
+  }
+
+  form.addEventListener("click", e => {
+    const b = e.target.closest("button[data-k]"); if (!b) return;
+    const k = b.dataset.k, v = b.dataset.v;
+    if (k === "topic") s.topic = v;
+    else s[k] = k === "size" ? +v : v;
+    render();
+  });
+  pieceSelect.addEventListener("change", () => { s.piece = pieceSelect.value; s.wood = s.size = s.fin = s.del = null; render(); });
+  form.addEventListener("input", validate);
+  $("photos").addEventListener("change", e => { const n = e.target.files.length; $("fileLabel").textContent = n ? n + (n === 1 ? " photo added" : " photos added") : "+ Add photos"; });
+
+  function summary(){
+    const t = TOPICS.find(x => x.key === s.topic).label;
+    const lines = ["Topic: " + t];
+    const p = cur();
+    if (s.topic === "furniture" && p){
+      lines.push("Piece: " + p.name);
+      if (s.wood) lines.push("Wood: " + p.woodOptions.find(w => w.key === s.wood).label);
+      if (s.size !== null) lines.push("Size: " + p.options[s.size].dims);
+      if (s.fin) lines.push("Finish: " + (s.fin === "varnish" ? "Varnished" : "Unfinished"));
+      if (s.del) lines.push("Delivery: " + (s.del === "deliver" ? "Deliver in Amsterdam" : "Pick up"));
+      if (s.size !== null){
+        const total = optionPrice(p.options[s.size], s.wood) + (s.fin === "varnish" ? p.varnishPrice : 0) + (s.del === "deliver" ? DELIVERY_PRICE : 0);
+        lines.push("Estimated total: " + euro(total));
+      }
+    }
+    return lines;
+  }
+
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    if (!validate()) return;
+    $("formError").hidden = true;
+    const lines = summary();
+    const fd = new FormData(form);
+    if (s.topic !== "furniture") fd.delete("piece");
+    fd.set("topic", TOPICS.find(x => x.key === s.topic).label);
+    fd.set("summary", lines.join("\n"));
+    fd.set("_subject", "Wednesday — " + TOPICS.find(x => x.key === s.topic).label);
+    if (s.topic === "furniture") fd.delete("photos");
+
+    if (FORM_ENDPOINT){
+      sendBtn.disabled = true; sendBtn.textContent = "Sending…";
+      try {
+        const res = await fetch(FORM_ENDPOINT, { method: "POST", body: fd, headers: { Accept: "application/json" } });
+        if (!res.ok) throw new Error();
+        done("I'll read it properly and reply within 2 working days.");
+      } catch (err) {
+        $("formError").innerHTML = 'Something went wrong. Please email me at <a href="mailto:' + CONTACT_EMAIL + '" style="text-decoration:underline;">' + CONTACT_EMAIL + '</a>.';
+        $("formError").hidden = false; validate();
+      }
+    } else {
+      const body = lines.concat([
+        "", "Name: " + fd.get("name"), "Email: " + fd.get("email"), "Address: " + fd.get("address"),
+        fd.get("dimensions") ? "Dimensions: " + fd.get("dimensions") : "", "", fd.get("message")
+      ]).filter((l, i, a) => l !== "" || a[i - 1] !== "").join("\n");
+      window.location.href = "mailto:" + CONTACT_EMAIL + "?subject=" + encodeURIComponent(fd.get("_subject")) + "&body=" + encodeURIComponent(body);
+      done("Your email app opened with everything filled in. Press send there" + (s.topic !== "furniture" ? " and attach your photos" : "") + ". I'll reply within 2 working days.");
+    }
+  });
+  function done(text){ $("thanksText").textContent = text; form.hidden = true; $("thanks").hidden = false; }
+  $("again").addEventListener("click", () => { form.reset(); s.piece = ""; s.wood = s.size = s.fin = s.del = null; $("fileLabel").textContent = "+ Add photos"; form.hidden = false; $("thanks").hidden = true; render(); });
+
+  render();
+</script>
+</body>
+</html>

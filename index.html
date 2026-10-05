@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wednesday — solid wood furniture, made by hand in Amsterdam</title>
+<meta name="description" content="Solid wood furniture made by hand in Amsterdam by one maker. Pieces in fixed sizes, or send a photo of what you have in mind.">
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=gambetta@400,500,400i&f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="page">
+
+  <section class="hero" aria-label="Wednesday Furniture">
+    <div class="hero-slides" id="slides"></div>
+    <div class="hero-shade"></div>
+    <div id="nav"></div>
+    <div class="hero-body">
+      <h1 class="h h-xl">Solid wood, <em>made by hand.</em></h1>
+      <p>Furniture in fixed sizes, built to order in Amsterdam by one maker.</p>
+      <div class="btn-group">
+        <a class="btn btn-primary" href="pieces.html">See all pieces</a>
+        <a class="btn btn-light" href="contact.html?topic=custom">I have a piece in mind</a>
+      </div>
+    </div>
+    <div class="hero-foot">
+      <a class="hero-caption" id="heroLink" href="pieces.html" aria-live="polite">
+        <span class="label" id="heroLabel"></span>
+        <span class="hero-note" id="heroNote"></span>
+      </a>
+      <button class="hero-toggle" id="heroToggle" type="button" aria-label="Pause carousel"></button>
+    </div>
+  </section>
+
+  <section class="banner tone tone-wood">
+    <h2 class="h h-l">No factory, <em>no wood pulp.</em></h2>
+    <div class="banner-side">
+      <p>Every piece comes in two or three fixed sizes and is made to order. Need something different? Get in touch.</p>
+      <ul class="principles" aria-label="How I work">
+        <li>Wood joints over screws</li>
+        <li>Solid wood only</li>
+        <li>One maker</li>
+        <li>Made to order</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2 class="h h-l">Pieces</h2><a class="link" href="pieces.html">All pieces</a></div>
+    <div class="carousel" id="carousel"></div>
+    <div class="dots" id="carDots"></div>
+  </section>
+
+  <section class="banner tone tone-wood">
+    <h2 class="h h-l">Also available for <em>maintenance.</em></h2>
+    <div class="banner-side">
+      <p>DIY, hanging and mounting work too. Tell me what needs doing.</p>
+      <a class="btn btn-light" href="contact.html?topic=small-job">Ask about a job</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2 class="h h-l">What people say</h2></div>
+    <div class="testi">
+      <p class="testi-quote" id="testiQuote"></p>
+      <div class="testi-meta">
+        <div class="testi-who"><strong id="testiWho"></strong><span id="testiPiece"></span></div>
+        <div class="dots" id="testiDots"></div>
+      </div>
+    </div>
+    <a class="share" href="contact.html?topic=testimonial">Own a piece? <span>Share yours</span></a>
+  </section>
+
+  <div id="footer"></div>
+</div>
+
+<script src="data.js"></script>
+<script>
+  mountChrome("", { overlay: true, services: false });
+
+  // hero carousel
+  const HERO = PIECES.slice(0, 4);
+  const slidesEl = document.getElementById("slides");
+  slidesEl.innerHTML = HERO.map((p, i) => '<img src="' + p.img + '" alt="' + esc(p.name) + '"' + (i ? ' loading="lazy"' : '') + '>').join("");
+  const slideImgs = slidesEl.querySelectorAll("img");
+  const toggle = document.getElementById("heroToggle");
+  let hero = 0;
+  let playing = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function showHero(i){
+    hero = i;
+    slideImgs.forEach((img, j) => img.classList.toggle("on", j === i));
+    document.getElementById("heroLabel").textContent = "No." + HERO[i].no + " · " + HERO[i].name;
+    document.getElementById("heroNote").textContent = HERO[i].note;
+    document.getElementById("heroLink").href = "piece.html?slug=" + HERO[i].slug;
+  }
+  function renderToggle(){
+    toggle.innerHTML = playing ? '<span class="bar"></span><span class="bar"></span>' : '<span class="tri"></span>';
+    toggle.setAttribute("aria-label", playing ? "Pause carousel" : "Play carousel");
+  }
+  toggle.addEventListener("click", () => { playing = !playing; renderToggle(); });
+  setInterval(() => { if (playing) showHero((hero + 1) % HERO.length); }, 10000);
+  showHero(0); renderToggle();
+
+  // pieces carousel
+  const car = document.getElementById("carousel");
+  const carDots = document.getElementById("carDots");
+  car.innerHTML = PIECES.map(p => pieceCard(p)).join("");
+  function step(){ const c = car.firstElementChild; return c ? c.offsetWidth + parseFloat(getComputedStyle(car).columnGap || 0) : 1; }
+  function pages(){ const c = car.firstElementChild; const vis = c ? Math.max(1, Math.round((car.clientWidth - 24) / c.offsetWidth)) : 1; return Math.max(1, PIECES.length - vis + 1); }
+  function renderCarDots(){
+    const n = pages(), cur = Math.min(n - 1, Math.round(car.scrollLeft / step()));
+    carDots.innerHTML = Array.from({ length: n }, (_, j) => '<button class="dot' + (j === cur ? ' on' : '') + '" type="button" aria-label="Show piece ' + (j + 1) + '" data-j="' + j + '"></button>').join("");
+  }
+  carDots.addEventListener("click", e => { const b = e.target.closest("[data-j]"); if (b) car.scrollTo({ left: +b.dataset.j * step(), behavior: "smooth" }); });
+  let raf; car.addEventListener("scroll", () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(renderCarDots); });
+  window.addEventListener("resize", renderCarDots);
+  renderCarDots();
+
+  // testimonials
+  let testi = 0;
+  const testiDots = document.getElementById("testiDots");
+  function showTesti(i){
+    testi = i; const t = TESTIMONIALS[i];
+    document.getElementById("testiQuote").textContent = "“" + t.quote + "”";
+    document.getElementById("testiWho").textContent = t.who;
+    document.getElementById("testiPiece").textContent = t.piece;
+    testiDots.innerHTML = TESTIMONIALS.map((_, j) => '<button class="dot' + (j === i ? ' on' : '') + '" type="button" aria-label="Show testimonial ' + (j + 1) + '" data-j="' + j + '"></button>').join("");
+  }
+  testiDots.addEventListener("click", e => { const b = e.target.closest("[data-j]"); if (b) showTesti(+b.dataset.j); });
+  showTesti(0);
+</script>
+</body>
+</html>

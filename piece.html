@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Piece · Wednesday</title>
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=gambetta@400,500,400i&f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="page">
+  <div id="nav"></div>
+  <div class="crumbs"><a href="pieces.html">Pieces</a><span>/</span><span id="crumb"></span></div>
+
+  <div class="piece">
+    <div class="piece-head">
+      <span class="label muted" id="pNo"></span>
+      <h1 class="h h-xl" id="pName"></h1>
+    </div>
+
+    <div class="piece-media">
+      <img class="main-img" id="mainImg" alt="">
+      <div class="thumbs" id="thumbs"></div>
+      <div class="piece-tags">
+        <span class="tag" id="pFrom"></span>
+        <span class="tag" id="pKey"></span>
+      </div>
+      <p class="piece-desc" id="pDesc"></p>
+    </div>
+
+    <div class="piece-info">
+      <dl class="specs" id="specs"></dl>
+
+      <div class="build">
+        <h2 class="h h-l">Build <em>yours</em></h2>
+        <div id="steps" style="display:flex;flex-direction:column;gap:8px;"></div>
+        <div class="summary tone tone-eclipse tone-flat">
+          <span class="label" id="sumTitle"></span>
+          <div id="sumRows" style="display:flex;flex-direction:column;gap:12px;"></div>
+          <div class="sum-total"><span id="totalLabel">From</span><strong id="total"></strong></div>
+          <button class="btn btn-light btn-request" id="requestBtn" type="button" disabled>Complete the steps</button>
+          <p class="fine" id="fine"></p>
+        </div>
+      </div>
+      <a class="ask" href="contact.html?topic=custom">Need another size? <span>Ask me</span></a>
+    </div>
+  </div>
+
+  <div id="footer"></div>
+</div>
+<script src="data.js"></script>
+<script>
+  mountChrome("Pieces", { services: true });
+
+  const p = PIECES.find(x => x.slug === qs("slug")) || PIECES[0];
+  document.title = p.name + " · Wednesday";
+  document.getElementById("crumb").textContent = p.name;
+  document.getElementById("pNo").textContent = "No. " + p.no;
+  document.getElementById("pName").textContent = p.name;
+  document.getElementById("pFrom").textContent = "From " + euro(p.startingFrom);
+  const keyEl = document.getElementById("pKey");
+  if (p.keyword) keyEl.textContent = p.keyword; else keyEl.hidden = true;
+  document.getElementById("pDesc").textContent = p.description;
+  document.getElementById("sumTitle").textContent = "Your " + p.name;
+  document.getElementById("fine").textContent = "No payment yet. Delivery in Amsterdam " + euro(DELIVERY_PRICE) + ", or pick up for free. I'll reply within 2 working days.";
+
+  // gallery
+  const imgs = pieceImages(p);
+  const mainImg = document.getElementById("mainImg");
+  const thumbs = document.getElementById("thumbs");
+  function showImg(i){
+    mainImg.src = imgs[i].src; mainImg.alt = p.name + " — " + imgs[i].caption;
+    thumbs.querySelectorAll("button").forEach((b, j) => b.classList.toggle("on", j === i));
+  }
+  thumbs.innerHTML = imgs.length > 1 ? imgs.map((im, i) => '<button type="button" data-i="' + i + '" aria-label="' + esc(im.caption) + '"><img src="' + im.src + '" alt="" loading="lazy"></button>').join("") : "";
+  thumbs.addEventListener("click", e => { const b = e.target.closest("[data-i]"); if (b) showImg(+b.dataset.i); });
+  showImg(0);
+
+  // specs
+  document.getElementById("specs").innerHTML = p.specs.concat([{ label: "Delivery", value: "Amsterdam " + euro(DELIVERY_PRICE) + " · pick up free" }])
+    .map(s => '<div class="spec"><dt>' + esc(s.label) + '</dt><dd>' + esc(s.value) + '</dd></div>').join("");
+
+  // builder
+  const sel = { wood: null, size: null, fin: null, del: null };
+  const STEPS = [];
+  if (p.woodOptions) STEPS.push({ key: "wood", title: "Wood", row: true, opts: () => p.woodOptions.map(w => ({ v: w.key, label: w.label })) });
+  STEPS.push({ key: "size", title: "Size", opts: () => p.options.map((o, i) => ({ v: i, label: o.dims, sub: euro(optionPrice(o, sel.wood)) })) });
+  if (p.varnishPrice) STEPS.push({ key: "fin", title: "Finish", opts: () => [{ v: "raw", label: "Unfinished", sub: "+ € 0" }, { v: "varnish", label: "Varnished", sub: "+ " + euro(p.varnishPrice) }] });
+  STEPS.push({ key: "del", title: "Delivery", opts: () => [{ v: "pickup", label: "I'll pick it up", sub: "+ € 0" }, { v: "deliver", label: "Deliver in Amsterdam, please", sub: "+ " + euro(DELIVERY_PRICE) }] });
+
+  const labelOf = (k) => {
+    const v = sel[k]; if (v === null) return null;
+    if (k === "wood") return p.woodOptions.find(w => w.key === v).label;
+    if (k === "size") return p.options[v].dims;
+    if (k === "fin") return v === "varnish" ? "Varnished" : "Unfinished";
+    return v === "deliver" ? "Amsterdam + " + euro(DELIVERY_PRICE) : "Pick up";
+  };
+  const stepsEl = document.getElementById("steps");
+  function render(){
+    let open = true;
+    stepsEl.innerHTML = STEPS.map((s, i) => {
+      const locked = !open; const val = sel[s.key];
+      if (val === null) open = false;
+      const status = val !== null ? labelOf(s.key) : (locked ? "After " + STEPS[i - 1].title.toLowerCase() : "Choose one");
+      const opts = s.opts().map(o => '<button type="button" class="opt' + (val === o.v ? ' on' : '') + '" data-k="' + s.key + '" data-v="' + o.v + '"' + (val === o.v ? ' aria-pressed="true"' : ' aria-pressed="false"') + '><span>' + esc(o.label) + '</span>' + (o.sub ? '<b>' + o.sub + '</b>' : '') + '</button>').join("");
+      return '<div class="step' + (locked ? ' locked' : '') + '"' + (locked ? ' aria-disabled="true"' : '') + '>' +
+        '<div class="step-head"><div class="step-title"><span class="step-num">0' + (i + 1) + '</span><span>' + s.title + '</span></div><span class="step-status">' + esc(status) + '</span></div>' +
+        (s.row ? '<div class="opts-row">' + opts + '</div>' : opts) + '</div>';
+    }).join("");
+
+    document.getElementById("sumRows").innerHTML = STEPS.map(s => '<div class="sum-row"><span>' + s.title + '</span><span>' + esc(labelOf(s.key) || "—") + '</span></div>').join("");
+    const ready = STEPS.every(s => sel[s.key] !== null);
+    const hasSize = sel.size !== null;
+    const total = hasSize ? optionPrice(p.options[sel.size], sel.wood) + (sel.fin === "varnish" ? p.varnishPrice : 0) + (sel.del === "deliver" ? DELIVERY_PRICE : 0) : p.startingFrom;
+    document.getElementById("totalLabel").textContent = hasSize ? "Total" : "From";
+    document.getElementById("total").textContent = euro(total);
+    const btn = document.getElementById("requestBtn");
+    btn.disabled = !ready;
+    btn.textContent = ready ? "Request this piece" : "Complete the " + STEPS.length + " steps";
+  }
+  stepsEl.addEventListener("click", e => {
+    const b = e.target.closest("[data-k]"); if (!b) return;
+    const k = b.dataset.k; sel[k] = k === "size" ? +b.dataset.v : b.dataset.v;
+    render();
+  });
+  document.getElementById("requestBtn").addEventListener("click", () => {
+    const q = new URLSearchParams({ topic: "furniture", piece: p.slug });
+    ["wood", "size", "fin", "del"].forEach(k => { if (sel[k] !== null) q.set(k, sel[k]); });
+    window.location.href = "contact.html?" + q.toString();
+  });
+  render();
+</script>
+</body>
+</html>

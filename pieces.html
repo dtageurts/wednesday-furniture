@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>All pieces · Wednesday</title>
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=gambetta@400,500,400i&f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="page">
+  <div id="nav"></div>
+  <div class="page-head">
+    <h1 class="h h-xl">All pieces</h1>
+    <p class="lead" style="width:530px;max-width:100%;min-height:65px">Five designs, each in fixed sizes. Made to order in 3–5 weeks. Delivery in Amsterdam € 40, or pick up for free.</p>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div id="footer"></div>
+</div>
+<script src="data.js"></script>
+<script>
+  mountChrome("Pieces", { services: true });
+  document.querySelector(".lead").textContent = PIECES.length + " designs, each in fixed sizes. Made to order in 3–5 weeks. Delivery in Amsterdam " + euro(DELIVERY_PRICE) + ", or pick up for free.";
+  document.getElementById("grid").innerHTML = PIECES.map(p => pieceCard(p)).join("") +
+    '<a class="card-custom tone tone-forest tone-flat" href="contact.html?topic=custom">' +
+      '<span class="card-title">Something else <em>in mind?</em></span>' +
+      '<span class="card-note">Send a photo and I\'ll tell you if I can build it.</span>' +
+      '<span class="btn btn-light">Send a photo</span>' +
+    '</a>';
+</script>
+</body>
+</html>

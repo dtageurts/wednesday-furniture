@@ -1,56 +1,27 @@
-# Wednesday — furniture portfolio & inquiry site
+# Wednesday website
 
-Furniture portfolio + inquiry site for a solo furniture maker in Utrecht, NL.
-Built from the design brief in `design-handoff/BUILD-SPEC.md` and the approved
-mockups in `design-handoff/mockups/`.
+Plain HTML/CSS/JS. No build step. Same file names as the old site, so all links keep working.
 
-## Stack
+Link check (Oct 2026 redesign): every page, nav link, button, piece card, photo and form route was checked. All targets exist.
 
-- Next.js 14 (App Router), TypeScript
-- Plain CSS (design tokens in `src/app/globals.css`), no CSS framework
-- Firebase Admin (Firestore) for inquiry storage — optional at dev time
-- Resend for inquiry email notifications — optional at dev time
+## Files
+- `index.html`, `pieces.html`, `piece.html?slug=…`, `contact.html`, `about.html`
+- `styles.css` — all styling (mobile first, desktop from 900px)
+- `data.js` — **edit this** for pieces, prices, keywords, testimonials, email, Instagram, delivery price and the form address
+- `photos/`, `brand/`
 
-## Getting started
+## Before going live: make the contact form send email
+Right now "Send request" opens the visitor's email app with everything filled in.
+To receive requests directly (no email app needed):
+1. Make a free form at https://formspree.io (or a similar service).
+2. Copy its URL (looks like `https://formspree.io/f/abcdwxyz`).
+3. Paste it in `data.js` → `const FORM_ENDPOINT = "…";`
+Note: photo uploads need a paid Formspree plan. On the free plan the text arrives, photos don't.
 
-```bash
-npm install
-cp .env.example .env.local   # fill in Firebase + Resend credentials
-npm run dev
-```
-
-Without `.env.local` configured, the inquiry form still works end-to-end —
-submissions are logged to the server console instead of written to Firestore,
-so you can develop and test the UI before wiring up real credentials.
-
-## Content
-
-Pieces (name, price, description, photos) live in `content/pieces.json` and
-can be edited without touching any component code.
-
-## Environment variables
-
-See `.env.example`. Required for inquiries to be stored and emailed:
-
-- `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY`,
-  `FIREBASE_STORAGE_BUCKET` — from a Firebase service account key
-- `RESEND_API_KEY`, `INQUIRY_TO_EMAIL` — for the notification email
-
-## Open questions carried over from the design brief
-
-1. Site is inquiry-only by design; no checkout is built. See
-   `design-handoff/BUILD-SPEC.md` §8 for the e-commerce recommendation.
-2. Piece names, prices and materials in `content/pieces.json` are
-   placeholders — confirm with the maker before launch.
-3. KvK number, VAT (BTW) number, and whether prices are incl./excl. BTW are
-   not yet reflected anywhere on the site.
-4. Real Instagram handle and preferred contact email display should be
-   double-checked (currently `@wednesdayfurniture` / `contact@wednesdayfurniture.com`).
-
-## Not yet done
-
-- Photo upload on the inquiry form (spec'd, not implemented — needs a
-  Firebase Storage signed-URL flow)
-- Dutch translation (spec calls for copy to go through a single content file
-  so this can be added later)
-- Deployment to Vercel + domain (`wednesdayfurniture.com`)
+## Push to GitHub safely
+1. In your repo, make a new branch: `git checkout -b redesign`
+2. Replace the old site files with the contents of this folder (keep your `.git` folder and any `CNAME` file).
+3. `git add -A && git commit -m "Redesign" && git push -u origin redesign`
+4. Check the preview (Netlify/Vercel make one per branch automatically; on GitHub Pages, open the files locally first).
+5. Happy? Open a Pull Request on GitHub from `redesign` into `main` and merge. That makes it live.
+6. Something wrong? On GitHub, open the merged Pull Request and press **Revert**.
