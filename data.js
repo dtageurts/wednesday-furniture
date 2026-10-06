@@ -112,7 +112,11 @@ const PIECES = [
       { dims: "160 × 200 cm", price: 620 },
       { dims: "180 × 200 cm", price: 640 }
     ],
-    img: "photos/floating-bed-frame-01.jpeg"
+    img: "photos/floating-bed-01.jpg",
+    images: [
+      { src: "photos/floating-bed-01.jpg", caption: "In the room" },
+      { src: "photos/floating-bed-02.jpg", caption: "Support structure" }
+    ]
   },
   {
     slug: "glass-coffee-table",
@@ -130,11 +134,10 @@ const PIECES = [
     options: [
       { dims: "80 × 40 × 38 cm", price: 375 }
     ],
-    img: "photos/glass-table-01.jpeg",
+    img: "photos/coffee-table-01.jpg",
     images: [
-      { src: "photos/glass-table-01.jpeg", caption: "In the room" },
-      { src: "photos/glass-table-02.jpeg", caption: "Joinery detail" },
-      { src: "photos/glass-table-03.jpeg", caption: "Tension wire detail" }
+      { src: "photos/coffee-table-01.jpg", caption: "Front view" },
+      { src: "photos/coffee-table-02.jpg", caption: "Top view" }
     ]
   }
 ];
