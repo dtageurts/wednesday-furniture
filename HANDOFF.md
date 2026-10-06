@@ -17,7 +17,7 @@
 ## Open to-dos
 1. Confirm a real inquiry arrives after deployment. The Resend endpoint is now `api/contact.mjs` and uses the existing Vercel variables `RESEND_API_KEY`, `INQUIRY_TO_EMAIL` and `RESEND_FROM_EMAIL`.
 2. Replace the 3 placeholder testimonials with real ones, and add customer photos if available.
-3. Confirm the piece keywords: Magnetic door, Dimmable, Seats 4–8, No visible legs, Steel tension wire.
+3. Confirm the piece keywords: Magnetic door, Dimmable, Seats 4–8, No visible legs, 10 mm thick glass.
 
 ## Branch workflow
 `git checkout -b redesign` → copy the files in → commit → `git push -u origin redesign` → check the preview → open a Pull Request into `main` → merge (this goes live) → **Revert** on the PR if needed.
