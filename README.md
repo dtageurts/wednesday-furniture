@@ -8,15 +8,16 @@ Link check (Oct 2026 redesign): every page, nav link, button, piece card, photo 
 - `index.html`, `pieces.html`, `piece.html?slug=…`, `contact.html`, `about.html`
 - `styles.css` — all styling (mobile first, desktop from 900px)
 - `data.js` — **edit this** for pieces, prices, keywords, testimonials, email, Instagram, delivery price and the form address
+- `api/contact.mjs` — server-side contact endpoint that sends email through Resend
 - `photos/`, `brand/`
 
-## Before going live: make the contact form send email
-Right now "Send request" opens the visitor's email app with everything filled in.
-To receive requests directly (no email app needed):
-1. Make a free form at https://formspree.io (or a similar service).
-2. Copy its URL (looks like `https://formspree.io/f/abcdwxyz`).
-3. Paste it in `data.js` → `const FORM_ENDPOINT = "…";`
-Note: photo uploads need a paid Formspree plan. On the free plan the text arrives, photos don't.
+## Contact form email
+The form posts to `/api/contact`, a Vercel Function that sends through Resend. Configure these server-side Vercel environment variables:
+- `RESEND_API_KEY` — required
+- `INQUIRY_TO_EMAIL` — optional; defaults to `contact@wednesdayfurniture.com`
+- `RESEND_FROM_EMAIL` — optional; defaults to Resend's test sender
+
+The sender domain in `RESEND_FROM_EMAIL` must be verified in Resend. Optional photo uploads are attached to the email (up to 4 images and 4 MB total, staying below Vercel's request limit).
 
 ## Push to GitHub safely
 1. In your repo, make a new branch: `git checkout -b redesign`

@@ -25,6 +25,7 @@
 
     <div>
       <form class="form" id="form" novalidate>
+        <label class="hp" aria-hidden="true">Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label>
         <div class="field">
           <span class="field-label">What is it about? *</span>
           <div class="topics" id="topics"></div>
@@ -146,7 +147,21 @@
   });
   pieceSelect.addEventListener("change", () => { s.piece = pieceSelect.value; s.wood = s.size = s.fin = s.del = null; render(); });
   form.addEventListener("input", validate);
-  $("photos").addEventListener("change", e => { const n = e.target.files.length; $("fileLabel").textContent = n ? n + (n === 1 ? " photo added" : " photos added") : "+ Add photos"; });
+  $("photos").addEventListener("change", e => {
+    const files = Array.from(e.target.files || []);
+    const total = files.reduce((n, f) => n + f.size, 0);
+    const invalid = files.length > 4 || files.some(f => f.size > 4 * 1024 * 1024 || !f.type.startsWith("image/")) || total > 4 * 1024 * 1024;
+    if (invalid){
+      e.target.value = "";
+      $("fileLabel").textContent = "+ Add photos";
+      $("formError").textContent = "Please add up to 4 images and keep the total below 4 MB.";
+      $("formError").hidden = false;
+      return;
+    }
+    $("formError").hidden = true;
+    const n = files.length;
+    $("fileLabel").textContent = n ? n + (n === 1 ? " photo added" : " photos added") : "+ Add photos";
+  });
 
   function summary(){
     const t = TOPICS.find(x => x.key === s.topic).label;
@@ -182,10 +197,11 @@
       sendBtn.disabled = true; sendBtn.textContent = "Sending…";
       try {
         const res = await fetch(FORM_ENDPOINT, { method: "POST", body: fd, headers: { Accept: "application/json" } });
-        if (!res.ok) throw new Error();
+        const result = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(result.error || "The request could not be sent. Please try again.");
         done("I'll read it properly and reply within 2 working days.");
       } catch (err) {
-        $("formError").innerHTML = 'Something went wrong. Please email me at <a href="mailto:' + CONTACT_EMAIL + '" style="text-decoration:underline;">' + CONTACT_EMAIL + '</a>.';
+        $("formError").textContent = err.message || ("Something went wrong. Please email me at " + CONTACT_EMAIL + ".");
         $("formError").hidden = false; validate();
       }
     } else {

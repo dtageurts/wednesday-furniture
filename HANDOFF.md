@@ -15,10 +15,7 @@
 - Contact: "Send request" stays disabled until every field marked * is filled in. "A piece of furniture" has no photo upload; the other 3 topics do.
 
 ## Open to-dos
-1. **Emails via Resend.** Resend needs a secret API key, so it can't run in the browser. It needs a small server function on the host (Vercel, Netlify or Cloudflare). GitHub Pages can't run one.
-   - The function receives the form POST and calls Resend's send-email API with `RESEND_API_KEY` stored as an environment variable on the host. Photos go through as attachments.
-   - Then set `FORM_ENDPOINT = "/api/contact"` in `data.js`.
-   - Needs from Douwe: which host the site runs on, the sender address (domain verified in Resend), and the "to" address.
+1. Confirm a real inquiry arrives after deployment. The Resend endpoint is now `api/contact.mjs` and uses the existing Vercel variables `RESEND_API_KEY`, `INQUIRY_TO_EMAIL` and `RESEND_FROM_EMAIL`.
 2. Replace the 3 placeholder testimonials with real ones, and add customer photos if available.
 3. Confirm the piece keywords: Magnetic door, Dimmable, Seats 4–8, No visible legs, Steel tension wire.
 

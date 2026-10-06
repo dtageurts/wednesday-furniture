@@ -1,7 +1,6 @@
 /* ---------- SETTINGS: edit these ---------- */
-// Paste your Formspree (or similar) form URL here to receive requests by email, e.g. "https://formspree.io/f/abcdwxyz".
-// Left empty, "Send request" opens the visitor's email app with everything filled in.
-const FORM_ENDPOINT = "";
+// The Vercel Function at this address sends requests through Resend.
+const FORM_ENDPOINT = "/api/contact";
 const CONTACT_EMAIL = "contact@wednesdayfurniture.com";
 const INSTAGRAM_URL = "https://instagram.com/wednesdayfurniture";
 const DELIVERY_PRICE = 40;
